@@ -711,13 +711,7 @@
       /* ── 애드센스 자리 ── */
       .ad-slot {
         width: 100%;
-        margin: 1.2rem 0;
-        min-height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* 애드센스 붙이기 전 임시 표시 — 실제 배포 시 주석 제거 */
-        /* border:1px dashed var(--fg3); */
+        /* 애드센스 붙일 때 margin: 1.2rem 0; min-height: 60px; 추가 */
       }
       .include-q-wrap {
         margin-bottom: 0.6rem;
@@ -1697,6 +1691,7 @@
         }
 
         // SVG → img 변환 (html2canvas SVG 렌더링 버그 우회)
+        const svgInnerHTML = document.getElementById("sc-svg").innerHTML;
         const svgEl = document.getElementById("sc-svg");
         const svgStr = new XMLSerializer().serializeToString(svgEl);
         const svgBlob = new Blob([svgStr], {
@@ -1714,8 +1709,10 @@
             const ctx = tempCanvas.getContext("2d");
             ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
 
-            // share-card의 svg를 img로 임시 교체
+            // svg 원복
             const scCard = document.querySelector("#share-card .sc-card");
+            scCard.innerHTML = `<svg id="sc-svg" viewBox="0 0 200 320">${svgInnerHTML}</svg>`;
+
             const imgEl = document.createElement("img");
             imgEl.src = tempCanvas.toDataURL("image/png");
             imgEl.style.width = "140px";
