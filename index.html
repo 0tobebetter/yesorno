@@ -1680,86 +1680,54 @@
 
         const qText = document.getElementById("qInput").value.trim();
         const includeQ =
-          document.getElementById("includeQCheck").checked && qText;
-
-        // 카드 SVG 내용 미리 저장 (교체 전)
-        const savedSVGHTML = currentCard ? SVG_DEFS[currentCard.key] : "";
-
-        // sc-question 표시 여부
-        const scQ = document.getElementById("sc-question");
-        if (includeQ) {
-          scQ.textContent = `"${qText}"`;
-          scQ.classList.remove("hidden");
-          document.getElementById("sc-footer").textContent =
-            "yesorno-tarot.com";
-        } else {
-          scQ.classList.add("hidden");
-          document.getElementById("sc-footer").textContent =
-            "yesorno-tarot.com · 고민은 포함되지 않습니다";
-        }
+          document.getElementById("includeQCheck") &&
+          document.getElementById("includeQCheck").checked &&
+          qText;
 
         showToast("이미지 생성 중...");
 
         try {
-          // SVG를 PNG data URL로 변환
-          const svgHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320">${savedSVGHTML}</svg>`;
-          const svgDataUrl =
-            "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgHTML);
-
-          const cardImg = await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = (e) => {
-              console.error("SVG 로드 실패:", e);
-              reject(new Error("SVG 로드 실패"));
-            };
-            img.src = svgDataUrl;
-          });
-
-          // 최종 카드 이미지 canvas 그리기
           const W = 400,
-            PAD = 36;
-          const cardW = 140,
-            cardH = 224;
+            PAD = 36,
+            maxTextW = 400 - 36 * 2;
 
-          // 텍스트 줄 계산
-          const lines = [];
-          lines.push({
-            text: c.isYes ? "YES." : "NO.",
-            font: "bold 52px Caveat, cursive",
-            color: "#1a1a1a",
-          });
-          lines.push({
-            text: c.confidence,
-            font: "14px sans-serif",
-            color: "#555",
-            badge: true,
-          });
-          if (includeQ && qText)
-            lines.push({
-              text: `"${qText}"`,
-              font: "italic 14px sans-serif",
-              color: "#888",
-            });
-          lines.push({
-            text: c.desc,
-            font: "15px sans-serif",
-            color: "#444",
-            wrap: true,
-          });
+          // 텍스트 줄바꿈 헬퍼
+          function wrapText(ctx, text, maxW) {
+            const words = text.split(" ");
+            const lines = [];
+            let line = "";
+            for (const w of words) {
+              const test = line ? line + " " + w : w;
+              if (ctx.measureText(test).width > maxW) {
+                lines.push(line);
+                line = w;
+              } else line = test;
+            }
+            if (line) lines.push(line);
+            return lines;
+          }
 
-          // canvas 높이 계산 (대략)
+          // 높이 계산용 임시 canvas
+          const tmp = document.createElement("canvas");
+          tmp.width = W * 2;
+          tmp.height = 10;
+          const tctx = tmp.getContext("2d");
+          tctx.scale(2, 2);
+          tctx.font = "14px sans-serif";
+          const descLines = wrapText(tctx, c.desc, maxTextW);
+
           const H =
             PAD +
-            28 +
-            cardH +
-            20 +
-            64 +
+            20 + // 타이틀
+            16 + // 타이틀 아래 여백
+            64 + // YES/NO
+            32 + // badge
+            (includeQ ? 26 : 0) + // 질문
+            14 + // 구분선
+            descLines.length * 22 + // 해석 텍스트
+            10 +
             24 +
-            (includeQ && qText ? 22 : 0) +
-            80 +
-            24 +
-            PAD;
+            PAD; // 푸터
 
           const canvas = document.createElement("canvas");
           canvas.width = W * 2;
@@ -1779,41 +1747,36 @@
           let y = PAD;
 
           // 타이틀
-          ctx.font = "bold 16px Caveat, cursive";
-          ctx.fillStyle = "#1a1a1a";
-          ctx.fillText("YES or NO 타로", PAD, y + 16);
-          y += 28;
+          ctx.font = "bold 13px sans-serif";
+          ctx.fillStyle = "#999";
+          ctx.fillText("YES or NO 타로", PAD, y + 13);
+          y += 20 + 16;
 
-          // 카드 이미지 (중앙 정렬)
-          const cardX = (W - cardW) / 2;
-          ctx.drawImage(cardImg, cardX, y, cardW, cardH);
-          y += cardH + 20;
-
-          // YES / NO 큰 글씨
-          ctx.font = "bold 52px Caveat, cursive";
+          // YES / NO
+          ctx.font = "bold 52px Georgia, serif";
           ctx.fillStyle = "#1a1a1a";
           ctx.fillText(c.isYes ? "YES." : "NO.", PAD, y + 48);
           y += 64;
 
           // confidence 뱃지
-          ctx.font = "bold 13px sans-serif";
-          const badgeText = c.confidence;
-          const badgeW = ctx.measureText(badgeText).width + 16;
+          ctx.font = "bold 12px sans-serif";
+          const bw = ctx.measureText(c.confidence).width + 18;
           ctx.fillStyle = "#f0ece2";
-          ctx.fillRect(PAD, y, badgeW, 22);
+          ctx.fillRect(PAD, y, bw, 22);
           ctx.strokeStyle = "#1a1a1a";
           ctx.lineWidth = 1.5;
-          ctx.strokeRect(PAD, y, badgeW, 22);
+          ctx.strokeRect(PAD, y, bw, 22);
           ctx.fillStyle = "#1a1a1a";
-          ctx.fillText(badgeText, PAD + 8, y + 15);
+          ctx.fillText(c.confidence, PAD + 9, y + 15);
           y += 32;
 
-          // 질문 (있을 때만)
+          // 질문 (선택)
           if (includeQ && qText) {
+            ctx.fillStyle = "#1a1a1a";
+            ctx.fillRect(PAD, y + 2, 3, 16);
             ctx.font = "italic 13px sans-serif";
             ctx.fillStyle = "#888";
-            ctx.fillRect(PAD, y, 3, 18);
-            ctx.fillText(`"${qText}"`, PAD + 10, y + 14);
+            ctx.fillText('"' + qText + '"', PAD + 10, y + 14);
             y += 26;
           }
 
@@ -1826,29 +1789,16 @@
           ctx.stroke();
           y += 14;
 
-          // 해석 텍스트 (줄바꿈)
+          // 해석 텍스트
           ctx.font = "14px sans-serif";
           ctx.fillStyle = "#444";
-          const maxW = W - PAD * 2;
-          const words = c.desc.split(" ");
-          let line = "";
-          for (const word of words) {
-            const test = line ? line + " " + word : word;
-            if (ctx.measureText(test).width > maxW) {
-              ctx.fillText(line, PAD, y);
-              y += 20;
-              line = word;
-            } else {
-              line = test;
-            }
-          }
-          if (line) {
-            ctx.fillText(line, PAD, y);
-            y += 20;
+          for (const dl of descLines) {
+            ctx.fillText(dl, PAD, y);
+            y += 22;
           }
           y += 10;
 
-          // 푸터
+          // 푸터 구분선
           ctx.strokeStyle = "#eee";
           ctx.lineWidth = 1;
           ctx.beginPath();
@@ -1856,14 +1806,15 @@
           ctx.lineTo(W - PAD, y);
           ctx.stroke();
           y += 12;
+
           ctx.font = "11px sans-serif";
-          ctx.fillStyle = "#aaa";
+          ctx.fillStyle = "#bbb";
           ctx.fillText("yesorno-tarot.com", PAD, y + 10);
 
-          // 공유 / 다운로드
+          // 저장 / 공유
           if (navigator.share && navigator.canShare) {
             canvas.toBlob(async (blob) => {
-              const file = new File([blob], `tarot-${c.confidence}.png`, {
+              const file = new File([blob], "tarot-result.png", {
                 type: "image/png",
               });
               if (navigator.canShare({ files: [file] })) {
@@ -1883,14 +1834,14 @@
             fallbackDownload(canvas, c);
           }
         } catch (e) {
-          console.error(e);
+          console.error("saveImage error:", e);
           showToast("이미지 저장에 실패했습니다");
         }
       }
 
       function fallbackDownload(canvas, c) {
         const link = document.createElement("a");
-        link.download = `tarot-${c ? c.confidence : "result"}.png`;
+        link.download = "tarot-result.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
         showToast("이미지가 저장되었습니다");
