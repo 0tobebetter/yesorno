@@ -719,6 +719,40 @@
         /* 애드센스 붙이기 전 임시 표시 — 실제 배포 시 주석 제거 */
         /* border:1px dashed var(--fg3); */
       }
+      .include-q-wrap {
+        margin-bottom: 0.6rem;
+      }
+      .include-q-label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: "IsYun", cursive;
+        font-size: 0.88rem;
+        color: var(--fg2);
+        cursor: pointer;
+      }
+      .include-q-label input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--fg);
+        cursor: pointer;
+      }
+      #share-card .sc-badge {
+        display: block; /* inline-block → block으로 변경 */
+        font-size: 0.8rem;
+        padding: 0.15rem 0.5rem;
+        border: 1.5px solid #1a1a1a;
+        background: #f0ece2;
+        margin-bottom: 0.8rem;
+      }
+      #share-card .sc-question {
+        font-size: 0.82rem;
+        color: #888;
+        margin-bottom: 0.6rem;
+        padding: 0.4rem 0.6rem;
+        border-left: 2px solid #1a1a1a;
+        font-style: italic;
+      }
     </style>
   </head>
   <body id="app">
@@ -755,6 +789,7 @@
       <div class="sc-card"><svg id="sc-svg" viewBox="0 0 200 320"></svg></div>
       <div class="sc-verdict" id="sc-verdict"></div>
       <div class="sc-badge" id="sc-badge"></div>
+      <div class="sc-question hidden" id="sc-question"></div>
       <div class="sc-desc" id="sc-desc"></div>
       <div class="sc-footer">
         https://yesorno-tarot.vercel.app/ · 양자택일! 타로가 딱 말씀드립니다.
@@ -864,6 +899,13 @@
 
           <!-- 공유 섹션 -->
           <div class="share-section">
+            <!-- 질문 포함 체크박스 — 질문 입력했을 때만 보임 -->
+            <div class="include-q-wrap hidden" id="includeQWrap">
+              <label class="include-q-label">
+                <input type="checkbox" id="includeQCheck" checked />
+                질문 포함해서 이미지로 저장하기
+              </label>
+            </div>
             <div class="share-notice">
               작성하신 고민은 공유되지 않고 결과만 공유됩니다
             </div>
@@ -927,10 +969,10 @@
 
     <script>
       // ════════════════════════════════
-      // Supabase 연결 (키 발급 후 교체)
+      // Supabase 연결
       // ════════════════════════════════
-      const SUPABASE_URL = ""; // 'https://xxxx.supabase.co'
-      const SUPABASE_KEY = ""; // 'your-anon-key'
+      const SUPABASE_URL = "https://tyjysooaqqmjolcnrtfo.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_9nFTcp6xibA9Q2eE6uKChQ_gDwI66_q";
 
       async function saveToSupabase(data) {
         if (!SUPABASE_URL || !SUPABASE_KEY) return;
@@ -1530,7 +1572,14 @@
             .getElementById("formArea")
             .querySelector(".field-label")
             .closest("#formArea").style.display = "none";
-
+          // 질문 입력했으면 체크박스 표시
+          const qText = document.getElementById("qInput").value.trim();
+          const includeWrap = document.getElementById("includeQWrap");
+          if (qText) {
+            includeWrap.classList.remove("hidden");
+          } else {
+            includeWrap.classList.add("hidden");
+          }
           // 횟수 차감
           incrementQuota();
           renderQuota();
@@ -1625,27 +1674,110 @@
           showToast("복사되었습니다");
         }
       }
-
-      function saveImage() {
+      async function saveImage() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "share_result",
-          method: "image_save",
+        dataLayer.push({ event: "share", method: "image_save" });
+
+        const c = currentCard;
+        const qText = document.getElementById("qInput").value.trim();
+        const includeQ =
+          document.getElementById("includeQCheck").checked && qText;
+
+        // sc-question 표시 여부
+        const scQ = document.getElementById("sc-question");
+        if (includeQ) {
+          scQ.textContent = `"${qText}"`;
+          scQ.classList.remove("hidden");
+          document.getElementById("sc-footer").textContent =
+            "yesorno-tarot.com";
+        } else {
+          scQ.classList.add("hidden");
+          document.getElementById("sc-footer").textContent =
+            "yesorno-tarot.com · 고민은 포함되지 않습니다";
+        }
+
+        // SVG → img 변환 (html2canvas SVG 렌더링 버그 우회)
+        const svgEl = document.getElementById("sc-svg");
+        const svgStr = new XMLSerializer().serializeToString(svgEl);
+        const svgBlob = new Blob([svgStr], {
+          type: "image/svg+xml;charset=utf-8",
         });
-        const el = document.getElementById("share-card");
-        el.style.left = "-9999px";
-        html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#faf8f3" })
-          .then((canvas) => {
-            const link = document.createElement("a");
-            const c = currentCard;
-            link.download = `tarot-${c ? c.confidence : "result"}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-            showToast("이미지가 저장되었습니다");
-          })
-          .catch(() => showToast("이미지 저장에 실패했습니다"));
+        const svgUrl = URL.createObjectURL(svgBlob);
+
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            // SVG를 canvas에 직접 그리고 share-card의 svg 자리에 img 교체
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = 140 * 2;
+            tempCanvas.height = 224 * 2;
+            const ctx = tempCanvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+
+            // share-card의 svg를 img로 임시 교체
+            const scCard = document.querySelector("#share-card .sc-card");
+            const imgEl = document.createElement("img");
+            imgEl.src = tempCanvas.toDataURL("image/png");
+            imgEl.style.width = "140px";
+            imgEl.style.height = "224px";
+            scCard.innerHTML = "";
+            scCard.appendChild(imgEl);
+
+            URL.revokeObjectURL(svgUrl);
+            resolve();
+          };
+          img.src = svgUrl;
+        });
+
+        try {
+          const el = document.getElementById("share-card");
+          const canvas = await html2canvas(el, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#faf8f3",
+            logging: false,
+          });
+
+          // svg 원복
+          const scCard = document.querySelector("#share-card .sc-card");
+          scCard.innerHTML = `<svg id="sc-svg" viewBox="0 0 200 320">${document.getElementById("sc-svg")?.innerHTML || ""}</svg>`;
+
+          if (navigator.share && navigator.canShare) {
+            canvas.toBlob(async (blob) => {
+              const file = new File(
+                [blob],
+                `tarot-${c ? c.confidence : "result"}.png`,
+                { type: "image/png" },
+              );
+              if (navigator.canShare({ files: [file] })) {
+                try {
+                  await navigator.share({
+                    files: [file],
+                    title: "YES or NO 타로 결과",
+                  });
+                  return;
+                } catch (err) {
+                  if (err.name === "AbortError") return;
+                }
+              }
+              fallbackDownload(canvas, c);
+            }, "image/png");
+          } else {
+            fallbackDownload(canvas, c);
+          }
+        } catch (e) {
+          console.error(e);
+          showToast("이미지 저장에 실패했습니다");
+        }
       }
 
+      function fallbackDownload(canvas, c) {
+        const link = document.createElement("a");
+        link.download = `tarot-${c ? c.confidence : "result"}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showToast("이미지가 저장되었습니다");
+      }
       function showToast(msg) {
         const t = document.getElementById("toast");
         t.textContent = msg;
