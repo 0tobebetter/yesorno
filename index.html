@@ -1809,7 +1809,7 @@
 
           ctx.font = "11px sans-serif";
           ctx.fillStyle = "#bbb";
-          ctx.fillText("yesorno-tarot.com", PAD, y + 10);
+          ctx.fillText("해결! 양자택일 타로", PAD, y + 10);
 
           // 저장 / 공유
           if (navigator.share && navigator.canShare) {
@@ -1831,6 +1831,7 @@
               fallbackDownload(canvas, c);
             }, "image/png");
           } else {
+            console.log("else fallback 진입");
             fallbackDownload(canvas, c);
           }
         } catch (e) {
@@ -1840,6 +1841,8 @@
       }
 
       function fallbackDownload(canvas, c) {
+        console.log("fallbackDownload 진입"); // ← 추가
+
         const link = document.createElement("a");
         link.download = "tarot-result.png";
         link.href = canvas.toDataURL("image/png");
@@ -1847,13 +1850,6 @@
         showToast("이미지가 저장되었습니다");
       }
 
-      function fallbackDownload(canvas, c) {
-        const link = document.createElement("a");
-        link.download = `tarot-${c ? c.confidence : "result"}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        showToast("이미지가 저장되었습니다");
-      }
       function showToast(msg) {
         const t = document.getElementById("toast");
         t.textContent = msg;
