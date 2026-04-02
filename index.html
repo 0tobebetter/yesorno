@@ -1683,15 +1683,15 @@
           document.getElementById("includeQCheck") &&
           document.getElementById("includeQCheck").checked &&
           qText;
-
         showToast("이미지 생성 중...");
 
         try {
           const W = 400,
             PAD = 36,
             maxTextW = 400 - 36 * 2;
+          const CARD_W = 120,
+            CARD_H = 192;
 
-          // 텍스트 줄바꿈 헬퍼
           function wrapText(ctx, text, maxW) {
             const words = text.split(" ");
             const lines = [];
@@ -1707,7 +1707,28 @@
             return lines;
           }
 
-          // 높이 계산용 임시 canvas
+          // SVG → Image 로드 시도 (실패해도 계속 진행)
+          let cardImg = null;
+          try {
+            const svgHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320">${SVG_DEFS[c.key]}</svg>`;
+            const svgDataUrl =
+              "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgHTML);
+            cardImg = await Promise.race([
+              new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = svgDataUrl;
+              }),
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("timeout")), 3000),
+              ),
+            ]);
+          } catch (e) {
+            console.warn("카드 이미지 로드 실패, 텍스트만 표시:", e.message);
+          }
+
+          // 높이 계산
           const tmp = document.createElement("canvas");
           tmp.width = W * 2;
           tmp.height = 10;
@@ -1718,13 +1739,14 @@
 
           const H =
             PAD +
-            20 + // 타이틀
-            16 + // 타이틀 아래 여백
+            20 +
+            16 + // 타이틀
+            (cardImg ? CARD_H + 20 : 0) + // 카드 이미지
             64 + // YES/NO
             32 + // badge
             (includeQ ? 26 : 0) + // 질문
             14 + // 구분선
-            descLines.length * 22 + // 해석 텍스트
+            descLines.length * 22 + // 해석
             10 +
             24 +
             PAD; // 푸터
@@ -1752,6 +1774,18 @@
           ctx.fillText("YES or NO 타로", PAD, y + 13);
           y += 20 + 16;
 
+          // 카드 이미지 (로드 성공한 경우만)
+          if (cardImg) {
+            const cardX = (W - CARD_W) / 2;
+            ctx.save();
+            ctx.strokeStyle = "#1a1a1a";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(cardX, y, CARD_W, CARD_H);
+            ctx.drawImage(cardImg, cardX, y, CARD_W, CARD_H);
+            ctx.restore();
+            y += CARD_H + 20;
+          }
+
           // YES / NO
           ctx.font = "bold 52px Georgia, serif";
           ctx.fillStyle = "#1a1a1a";
@@ -1770,7 +1804,7 @@
           ctx.fillText(c.confidence, PAD + 9, y + 15);
           y += 32;
 
-          // 질문 (선택)
+          // 질문
           if (includeQ && qText) {
             ctx.fillStyle = "#1a1a1a";
             ctx.fillRect(PAD, y + 2, 3, 16);
@@ -1798,7 +1832,7 @@
           }
           y += 10;
 
-          // 푸터 구분선
+          // 푸터
           ctx.strokeStyle = "#eee";
           ctx.lineWidth = 1;
           ctx.beginPath();
@@ -1806,13 +1840,16 @@
           ctx.lineTo(W - PAD, y);
           ctx.stroke();
           y += 12;
-
           ctx.font = "11px sans-serif";
           ctx.fillStyle = "#bbb";
           ctx.fillText("해결! 양자택일 타로", PAD, y + 10);
 
           // 저장 / 공유
-          if (navigator.share && navigator.canShare) {
+          // 저장 / 공유 — 모바일만 Web Share API 사용
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(
+            navigator.userAgent,
+          );
+          if (isMobile && navigator.share && navigator.canShare) {
             canvas.toBlob(async (blob) => {
               const file = new File([blob], "tarot-result.png", {
                 type: "image/png",
@@ -1823,15 +1860,14 @@
                     files: [file],
                     title: "YES or NO 타로 결과",
                   });
-                  return;
                 } catch (err) {
-                  if (err.name === "AbortError") return;
+                  if (err.name !== "AbortError") fallbackDownload(canvas, c);
                 }
+                return;
               }
               fallbackDownload(canvas, c);
             }, "image/png");
           } else {
-            console.log("else fallback 진입");
             fallbackDownload(canvas, c);
           }
         } catch (e) {
