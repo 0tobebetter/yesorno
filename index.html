@@ -1785,6 +1785,29 @@
       // ════════════════════════════════
       // 초기화
       // ════════════════════════════════
+
+      // 시스템 다크모드 감지
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        dark = 1;
+        document.getElementById("app").dataset.dark = 1;
+        document.getElementById("toggleLabel").textContent = "☀️ 라이트";
+      }
+
+      // 시스템 설정 변경 시 실시간 반영
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          dark = e.matches ? 1 : 0;
+          document.getElementById("app").dataset.dark = dark;
+          document.getElementById("toggleLabel").textContent = dark
+            ? "☀️ 라이트"
+            : "🌙 다크";
+          updateDivider();
+        });
+
       updateDivider();
       renderQuota();
     </script>
