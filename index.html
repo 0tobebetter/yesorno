@@ -1232,7 +1232,7 @@
             "됩니다. 다만 힘으로 누르지 말고 차분하게 다뤄야 합니다.",
           ],
         },
-        wheel: {
+        wheeloffortune: {
           yes: true,
           confidence: "운이 도는 YES",
           descs: [
@@ -1413,7 +1413,7 @@
         "chariot",
         "strength",
         "hermit",
-        "wheel",
+        "wheeloffortune",
         "justice",
         "hangedMan",
         "death",
@@ -1709,7 +1709,10 @@
           const cardImg = await new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve(img);
-            img.onerror = reject;
+            img.onerror = (e) => {
+              console.error("SVG 로드 실패:", e);
+              reject(new Error("SVG 로드 실패"));
+            };
             img.src = svgDataUrl;
           });
 
