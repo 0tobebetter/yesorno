@@ -785,7 +785,7 @@
       <div class="sc-badge" id="sc-badge"></div>
       <div class="sc-question hidden" id="sc-question"></div>
       <div class="sc-desc" id="sc-desc"></div>
-      <div class="sc-footer">
+      <div class="sc-footer" id="sc-footer">
         https://yesorno-tarot.vercel.app/ · 양자택일! 타로가 딱 말씀드립니다.
       </div>
     </div>
@@ -971,7 +971,7 @@
       async function saveToSupabase(data) {
         if (!SUPABASE_URL || !SUPABASE_KEY) return;
         try {
-          const res = await fetch(`${SUPABASE_URL}/rest/v1/tarot_readings`, {
+          await fetch(`${SUPABASE_URL}/rest/v1/tarot_readings`, {
             method: "POST",
             headers: {
               apikey: SUPABASE_KEY,
@@ -981,14 +981,8 @@
             },
             body: JSON.stringify(data),
           });
-          if (!res.ok) {
-            const errText = await res.text();
-            console.error("Supabase error:", res.status, errText);
-          } else {
-            console.log("Supabase saved OK:", data.card_name);
-          }
         } catch (e) {
-          console.error("Supabase fetch failed:", e);
+          console.warn("Supabase save failed", e);
         }
       }
 
@@ -1147,7 +1141,7 @@
             "할 수 있습니다. 지금은 망설임보다 실행이 답입니다.",
           ],
         },
-        highpriestess: {
+        highPriestess: {
           yes: false,
           confidence: "조용한 NO",
           descs: [
@@ -1264,7 +1258,7 @@
             "됩니다. 다만 감정이 아니라 기준과 사실에 따라 결정해야 합니다.",
           ],
         },
-        hangedman: {
+        hangedMan: {
           yes: false,
           confidence: "지금은 NO",
           descs: [
@@ -1411,7 +1405,7 @@
       const CARD_KEYS = [
         "fool",
         "magician",
-        "highpriestess",
+        "highPriestess",
         "empress",
         "emperor",
         "hierophant",
@@ -1421,7 +1415,7 @@
         "hermit",
         "wheeloffortune",
         "justice",
-        "hangedman",
+        "hangedMan",
         "death",
         "temperance",
         "devil",
