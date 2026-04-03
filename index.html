@@ -3,7 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <!-- Consent Mode v2 — GTM보다 먼저 와야 함 -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("consent", "default", {
+        analytics_storage: "granted",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500,
+      });
+    </script>
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -27,7 +40,7 @@
     <meta property="og:title" content="YES or NO 타로" id="og-title" />
     <meta
       property="og:description"
-      content="양자택일! 타로가 딱 말씀드립니다"
+      content="해결! 양자택일 타로"
       id="og-desc"
     />
     <meta property="og:type" content="website" />
@@ -43,10 +56,7 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="YES or NO 타로" />
-    <meta
-      name="twitter:description"
-      content="양자택일! 타로가 딱 말씀드립니다"
-    />
+    <meta name="twitter:description" content="해결! 양자택일 타로" />
     <meta
       name="twitter:image"
       content="https://yesorno-tarot.vercel.app/og-image.png"
@@ -786,7 +796,7 @@
       <div class="sc-question hidden" id="sc-question"></div>
       <div class="sc-desc" id="sc-desc"></div>
       <div class="sc-footer" id="sc-footer">
-        https://yesorno-tarot.vercel.app/ · 양자택일! 타로가 딱 말씀드립니다.
+        https://yesorno-tarot.vercel.app/ · 해결! 양자택일 타로
       </div>
     </div>
 
@@ -801,9 +811,7 @@
 
       <!-- 헤더 -->
       <div class="title">YES or NO</div>
-      <div class="subtitle">
-        양자택일! <span class="hl">타로</span>가 딱 말씀드립니다
-      </div>
+      <div class="subtitle">해결! <span class="hl">양자택일</span>타로</div>
 
       <!-- 남은 횟수 -->
       <div class="quota-badge" id="quotaBadge">
@@ -1090,6 +1098,14 @@
         );
         document.getElementById("consentBanner").classList.add("hidden");
 
+        // Consent Mode v2 업데이트
+        gtag("consent", "update", {
+          analytics_storage: "granted",
+          ad_storage: accepted ? "granted" : "denied",
+          ad_user_data: accepted ? "granted" : "denied",
+          ad_personalization: accepted ? "granted" : "denied",
+        });
+
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
           event: "cookie_consent",
@@ -1097,10 +1113,15 @@
         });
       }
 
-      (function initConsent() {
-        const v = localStorage.getItem("cookie_consent");
-        if (v) document.getElementById("consentBanner").classList.add("hidden");
-      })();
+      if (v) {
+        document.getElementById("consentBanner").classList.add("hidden");
+        gtag("consent", "update", {
+          analytics_storage: "granted",
+          ad_storage: v === "accepted" ? "granted" : "denied",
+          ad_user_data: v === "accepted" ? "granted" : "denied",
+          ad_personalization: v === "accepted" ? "granted" : "denied",
+        });
+      }
 
       // ════════════════════════════════
       // 카드 데이터
@@ -1624,7 +1645,7 @@
       function getShareText() {
         const c = currentCard;
         if (!c) return "";
-        return `🃏 YES or NO 타로\n결과: ${c.isYes ? "YES" : "NO"} (${c.confidence})\n${c.desc}\n\n#타로 #운세 #yesorno`;
+        return `🔮 YES or NO 타로\n결과: ${c.isYes ? "YES" : "NO"} (${c.confidence})\n${c.desc}\n\nhttps://yesorno-tarot.vercel.app/ \n#타로 #양자택일타로 #yesorno`;
       }
 
       function shareToX() {
