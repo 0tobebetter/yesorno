@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @font-face {
+        font-family: "IsYun";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff")
+          format("woff");
+        font-weight: normal;
+        font-display: swap;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        background: #faf8f3;
+        overflow: hidden;
+      }
+      .card {
+        width: 1200px;
+        height: 630px;
+        background: #faf8f3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 60px 72px;
+        position: relative;
+      }
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border: 2px solid #1a1a1a;
+        pointer-events: none;
+      }
+
+      /* 왼쪽 */
+      .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+        flex: 1;
+      }
+      .title {
+        font-family: "Caveat", cursive;
+        font-size: 140px;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1;
+        margin-bottom: 16px;
+        letter-spacing: -2px;
+      }
+      .subtitle {
+        font-family: "IsYun", cursive;
+        font-size: 38px;
+        color: #1a1a1a;
+        margin-bottom: 36px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .hl {
+        position: relative;
+        display: inline-block;
+      }
+      .hl::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 100%;
+        height: 6px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='6'%3E%3Cpath d='M0 4 Q7.5 1 15 4 Q22.5 7 30 4 Q37.5 1 45 4 Q52.5 7 60 4' fill='none' stroke='%231a1a1a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+        background-size: 60px 6px;
+      }
+      .dots-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "IsYun", cursive;
+        font-size: 25px;
+        color: #555;
+        margin-bottom: 48px;
+      }
+      .dots {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #1a1a1a;
+      }
+      .url {
+        font-family: "IsYun", cursive;
+        font-size: 20px;
+        color: #bbb;
+      }
+
+      /* 오른쪽 카드들 */
+      .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding-left: 0px;
+      }
+      .tarot-card {
+        border: 2px solid #1a1a1a;
+        box-shadow: 4px 4px 0 #1a1a1a;
+        background: #fff;
+        flex-shrink: 0;
+      }
+      .tarot-card svg {
+        display: block;
+      }
+      .tarot-card.main {
+        width: 171px;
+        height: 273px;
+      }
+      .tarot-card.sub {
+        width: 119px;
+        height: 190px;
+        opacity: 0.65;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="left">
+        <div class="title">YES or NO</div>
+        <div class="subtitle">해결! <span class="hl">양자택일</span>타로</div>
+        <div class="dots-row">
+          <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          하루 세 번 카드 뽑기
+        </div>
+        <div class="url">yesorno-tarot.vercel.app</div>
+      </div>
+
+      <div class="right">
+        <!-- The Star -->
+        <div class="tarot-card sub">
+          <svg
+            viewBox="0 0 200 320"
+            width="119"
+            height="190"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="200" height="320" fill="#eef4ff" />
+            <g fill="#111">
+              <polygon
+                points="100,48 105,66 123,66 109,77 114,95 100,84 86,95 91,77 77,66 95,66"
+              />
+              <polygon
+                points="44,92 47,102 57,102 49,108 52,118 44,112 36,118 39,108 31,102 41,102"
+                opacity="0.5"
+              />
+              <polygon
+                points="158,78 161,88 171,88 163,94 166,104 158,98 150,104 153,94 145,88 155,88"
+                opacity="0.5"
+              />
+              <polygon
+                points="30,155 33,163 41,163 35,168 37,176 30,171 23,176 25,168 19,163 27,163"
+                opacity="0.35"
+              />
+              <polygon
+                points="172,140 175,148 183,148 177,153 179,161 172,156 165,161 167,153 161,148 169,148"
+                opacity="0.35"
+              />
+            </g>
+            <circle
+              cx="100"
+              cy="170"
+              r="32"
+              fill="none"
+              stroke="#111"
+              stroke-width="1.5"
+            />
+            <circle cx="100" cy="170" r="5" fill="#ff3b00" />
+            <text
+              x="100"
+              y="230"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="10"
+              font-weight="900"
+              fill="#111"
+              letter-spacing="4"
+            >
+              THE STAR
+            </text>
+            <text
+              x="100"
+              y="254"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="21"
+              font-weight="900"
+              fill="#ff3b00"
+            >
+              XVII
+            </text>
+            <rect
+              x="8"
+              y="8"
+              width="184"
+              height="304"
+              fill="none"
+              stroke="#111"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+
+        <!-- The Sun (메인) -->
+        <div class="tarot-card main">
+          <svg
+            viewBox="0 0 200 320"
+            width="171"
+            height="273"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="200" height="320" fill="#fff9e6" />
+            <circle
+              cx="100"
+              cy="120"
+              r="55"
+              fill="none"
+              stroke="#111"
+              stroke-width="2"
+            />
+            <circle
+              cx="100"
+              cy="120"
+              r="40"
+              fill="#ffe600"
+              stroke="#111"
+              stroke-width="1.5"
+            />
+            <circle cx="100" cy="120" r="22" fill="#ff3b00" />
+            <g stroke="#111" stroke-width="2">
+              <line x1="100" y1="60" x2="100" y2="50" />
+              <line x1="100" y1="180" x2="100" y2="190" />
+              <line x1="140" y1="120" x2="150" y2="120" />
+              <line x1="60" y1="120" x2="50" y2="120" />
+              <line x1="129" y1="91" x2="136" y2="84" />
+              <line x1="71" y1="91" x2="64" y2="84" />
+              <line x1="129" y1="149" x2="136" y2="156" />
+              <line x1="71" y1="149" x2="64" y2="156" />
+              <line x1="120" y1="68" x2="125" y2="60" />
+              <line x1="80" y1="68" x2="75" y2="60" />
+              <line x1="120" y1="172" x2="125" y2="180" />
+              <line x1="80" y1="172" x2="75" y2="180" />
+            </g>
+            <text
+              x="100"
+              y="214"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="10"
+              font-weight="900"
+              fill="#111"
+              letter-spacing="4"
+            >
+              THE SUN
+            </text>
+            <text
+              x="100"
+              y="238"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="22"
+              font-weight="900"
+              fill="#ff3b00"
+            >
+              XIX
+            </text>
+            <rect
+              x="8"
+              y="8"
+              width="184"
+              height="304"
+              fill="none"
+              stroke="#111"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+
+        <!-- The World -->
+        <div class="tarot-card sub">
+          <svg
+            viewBox="0 0 200 320"
+            width="119"
+            height="190"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="200" height="320" fill="#efffee" />
+            <ellipse
+              cx="100"
+              cy="148"
+              rx="54"
+              ry="72"
+              fill="none"
+              stroke="#111"
+              stroke-width="2"
+            />
+            <ellipse
+              cx="100"
+              cy="148"
+              rx="36"
+              ry="50"
+              fill="none"
+              stroke="#111"
+              stroke-width="1"
+              stroke-dasharray="4 3"
+            />
+            <circle cx="100" cy="148" r="14" fill="#111" />
+            <circle cx="100" cy="148" r="7" fill="#ffe600" />
+            <g fill="#111" opacity="0.6">
+              <polygon
+                points="38,82 41,90 49,90 43,95 45,103 38,98 31,103 33,95 27,90 35,90"
+              />
+              <polygon
+                points="162,82 165,90 173,90 167,95 169,103 162,98 155,103 157,95 151,90 159,90"
+              />
+              <polygon
+                points="38,222 41,230 49,230 43,235 45,243 38,238 31,243 33,235 27,230 35,230"
+              />
+              <polygon
+                points="162,222 165,230 173,230 167,235 169,243 162,238 155,243 157,235 151,230 159,230"
+              />
+            </g>
+            <text
+              x="100"
+              y="258"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="10"
+              font-weight="900"
+              fill="#111"
+              letter-spacing="3"
+            >
+              THE WORLD
+            </text>
+            <text
+              x="100"
+              y="282"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-size="21"
+              font-weight="900"
+              fill="#ff3b00"
+            >
+              XXI
+            </text>
+            <rect
+              x="8"
+              y="8"
+              width="184"
+              height="304"
+              fill="none"
+              stroke="#111"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
