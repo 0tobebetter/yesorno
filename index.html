@@ -908,9 +908,9 @@
                 질문 포함해서 이미지로 저장하기
               </label>
             </div>
-            <div class="share-notice">
+            <!-- <div class="share-notice">
               작성하신 고민은 공유되지 않고 결과만 공유됩니다
-            </div>
+            </div> -->
             <div class="share-row">
               <button class="share-btn primary" onclick="shareToX()">
                 <svg
@@ -1113,15 +1113,18 @@
         });
       }
 
-      if (v) {
-        document.getElementById("consentBanner").classList.add("hidden");
-        gtag("consent", "update", {
-          analytics_storage: "granted",
-          ad_storage: v === "accepted" ? "granted" : "denied",
-          ad_user_data: v === "accepted" ? "granted" : "denied",
-          ad_personalization: v === "accepted" ? "granted" : "denied",
-        });
-      }
+      (function initConsent() {
+        const v = localStorage.getItem("cookie_consent");
+        if (v) {
+          document.getElementById("consentBanner").classList.add("hidden");
+          gtag("consent", "update", {
+            analytics_storage: "granted",
+            ad_storage: v === "accepted" ? "granted" : "denied",
+            ad_user_data: v === "accepted" ? "granted" : "denied",
+            ad_personalization: v === "accepted" ? "granted" : "denied",
+          });
+        }
+      })();
 
       // ════════════════════════════════
       // 카드 데이터
@@ -1522,7 +1525,7 @@
         drawn = false;
 
       function updateCount() {
-        const v = document.getElementById("qInput").value.length;
+        const v = document.getElementById("qInput")?.value.length || 0;
         const el = document.getElementById("charCount");
         el.textContent = `${v} / 100`;
         el.className =
@@ -1539,7 +1542,7 @@
         const catVal = document.getElementById("catSelect").value;
         const catIdx =
           catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
-        const qText = document.getElementById("qInput").value.trim();
+        const qText = document.getElementById("qInput")?.value.trim() || "";
 
         currentCard = {
           key,
@@ -1588,7 +1591,7 @@
             .querySelector(".field-label")
             .closest("#formArea").style.display = "none";
           // 질문 입력했으면 체크박스 표시
-          const qText = document.getElementById("qInput").value.trim();
+          const qText = document.getElementById("qInput")?.value.trim() || "";
           const includeWrap = document.getElementById("includeQWrap");
           if (qText) {
             includeWrap.classList.remove("hidden");
@@ -1699,7 +1702,7 @@
           return;
         }
 
-        const qText = document.getElementById("qInput").value.trim();
+        const qText = document.getElementById("qInput")?.value.trim() || "";
         const includeQ =
           document.getElementById("includeQCheck") &&
           document.getElementById("includeQCheck").checked &&
