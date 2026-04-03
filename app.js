@@ -1,0 +1,426 @@
+      // 앱 상태
+      // ════════════════════════════════
+      let currentCard = null,
+        drawn = false;
+
+      function updateCount() {
+        const v = document.getElementById("qInput")?.value.length || 0;
+        const el = document.getElementById("charCount");
+        el.textContent = `${v} / 100`;
+        el.className =
+          "char-count" + (v >= 100 ? " over" : v >= 80 ? " warn" : "");
+      }
+
+      function drawCard() {
+        if (drawn || getQuotaUsed() >= 3) return;
+        drawn = true;
+        document.getElementById("drawBtn").disabled = true;
+
+        const key = CARD_KEYS[Math.floor(Math.random() * CARD_KEYS.length)];
+        const data = DESCS[key];
+        const catVal = document.getElementById("catSelect").value;
+        const catIdx =
+          catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
+        const qText = document.getElementById("qInput")?.value.trim() || "";
+
+        currentCard = {
+          key,
+          confidence: data.confidence,
+          isYes: data.yes,
+          desc: data.descs[catIdx],
+          cat: catVal,
+        };
+
+        // 카드 앞면 SVG
+        document.getElementById("cardFront").innerHTML =
+          `<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">${SVG_DEFS[key]}</svg>`;
+
+        // 숨겨진 공유 카드 채우기
+        document.getElementById("sc-svg").innerHTML = SVG_DEFS[key];
+        document.getElementById("sc-verdict").textContent = data.yes
+          ? "YES."
+          : "NO.";
+        document.getElementById("sc-badge").textContent = data.confidence;
+        document.getElementById("sc-desc").textContent = data.descs[catIdx];
+
+        // OG 태그 업데이트
+        document
+          .getElementById("og-title")
+          .setAttribute("content", `${data.confidence} | YES or NO 타로`);
+        document
+          .getElementById("og-desc")
+          .setAttribute("content", data.descs[catIdx]);
+
+        setTimeout(
+          () => document.getElementById("cardInner").classList.add("flipped"),
+          200,
+        );
+        setTimeout(() => {
+          document.getElementById("resultArea").classList.remove("hidden");
+          document.getElementById("resultVerdict").textContent = data.yes
+            ? "YES."
+            : "NO.";
+          document.getElementById("resultBadge").textContent = data.confidence;
+          document.getElementById("resultDesc").textContent =
+            data.descs[catIdx];
+          updateDivider();
+          document.getElementById("drawBtn").style.display = "none";
+          document
+            .getElementById("formArea")
+            .querySelector(".field-label")
+            .closest("#formArea").style.display = "none";
+          // 질문 입력했으면 체크박스 표시
+          const qText = document.getElementById("qInput")?.value.trim() || "";
+          const includeWrap = document.getElementById("includeQWrap");
+          if (qText) {
+            includeWrap.classList.remove("hidden");
+          } else {
+            includeWrap.classList.add("hidden");
+          }
+          // 횟수 차감
+          incrementQuota();
+          renderQuota();
+
+          // GA4 이벤트
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push({
+            event: "card_drawn",
+            card_name: key,
+            category: catVal || "none",
+            result: data.yes ? "yes" : "no",
+            confidence: data.confidence,
+          });
+
+          // Supabase 저장
+          saveToSupabase({
+            card_name: key,
+            category: catVal || null,
+            question: qText || null,
+            result: data.yes ? "YES" : "NO",
+            confidence: data.confidence,
+          });
+        }, 1000);
+      }
+
+      function resetCard() {
+        if (getQuotaUsed() >= 3) return;
+        drawn = false;
+        document.getElementById("cardInner").classList.remove("flipped");
+        document.getElementById("resultArea").classList.add("hidden");
+        const btn = document.getElementById("drawBtn");
+        btn.disabled = false;
+        btn.style.display = "";
+        document.getElementById("formArea").style.display = "";
+        document.getElementById("qInput").value = "";
+        document.getElementById("catSelect").value = "";
+        updateCount();
+        currentCard = null;
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          event: "draw_again",
+        });
+      }
+
+      // ════════════════════════════════
+      // 공유
+      // ════════════════════════════════
+      function getShareText() {
+        const c = currentCard;
+        if (!c) return "";
+        return `🔮 YES or NO 타로\n결과: ${c.isYes ? "YES" : "NO"} (${c.confidence})\n${c.desc}\n\nhttps://yesorno-tarot.vercel.app/ \n#타로 #양자택일타로 #yesorno`;
+      }
+
+      function shareToX() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          event: "share_result",
+          method: "x",
+        });
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`,
+          "_blank",
+        );
+      }
+      function shareToInstagram() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          event: "share_result",
+          method: "instagram",
+        });
+        if (navigator.clipboard) navigator.clipboard.writeText(getShareText());
+        showToast("복사됨 — 인스타그램에 붙여넣기 하세요!");
+      }
+      function copyResult() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          event: "share_result",
+          method: "copy",
+        });
+        const t = getShareText();
+        if (navigator.clipboard)
+          navigator.clipboard
+            .writeText(t)
+            .then(() => showToast("복사되었습니다"));
+        else {
+          const ta = document.createElement("textarea");
+          ta.value = t;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          showToast("복사되었습니다");
+        }
+      }
+      async function saveImage() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ event: "share", method: "image_save" });
+
+        const c = currentCard;
+        if (!c) {
+          showToast("먼저 카드를 뽑아주세요");
+          return;
+        }
+
+        const qText = document.getElementById("qInput")?.value.trim() || "";
+        const includeQ =
+          document.getElementById("includeQCheck") &&
+          document.getElementById("includeQCheck").checked &&
+          qText;
+        showToast("이미지 생성 중...");
+
+        try {
+          const W = 400,
+            PAD = 36,
+            maxTextW = 400 - 36 * 2;
+          const CARD_W = 120,
+            CARD_H = 192;
+
+          function wrapText(ctx, text, maxW) {
+            const words = text.split(" ");
+            const lines = [];
+            let line = "";
+            for (const w of words) {
+              const test = line ? line + " " + w : w;
+              if (ctx.measureText(test).width > maxW) {
+                lines.push(line);
+                line = w;
+              } else line = test;
+            }
+            if (line) lines.push(line);
+            return lines;
+          }
+
+          // SVG → Image 로드 시도 (실패해도 계속 진행)
+          let cardImg = null;
+          try {
+            const svgHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320">${SVG_DEFS[c.key]}</svg>`;
+            const svgDataUrl =
+              "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgHTML);
+            cardImg = await Promise.race([
+              new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = svgDataUrl;
+              }),
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("timeout")), 3000),
+              ),
+            ]);
+          } catch (e) {
+            console.warn("카드 이미지 로드 실패, 텍스트만 표시:", e.message);
+          }
+
+          // 높이 계산
+          const tmp = document.createElement("canvas");
+          tmp.width = W * 2;
+          tmp.height = 10;
+          const tctx = tmp.getContext("2d");
+          tctx.scale(2, 2);
+          tctx.font = "14px sans-serif";
+          const descLines = wrapText(tctx, c.desc, maxTextW);
+
+          const H =
+            PAD +
+            20 +
+            16 + // 타이틀
+            (cardImg ? CARD_H + 20 : 0) + // 카드 이미지
+            64 + // YES/NO
+            32 + // badge
+            (includeQ ? 26 : 0) + // 질문
+            14 + // 구분선
+            descLines.length * 22 + // 해석
+            10 +
+            24 +
+            PAD; // 푸터
+
+          const canvas = document.createElement("canvas");
+          canvas.width = W * 2;
+          canvas.height = H * 2;
+          const ctx = canvas.getContext("2d");
+          ctx.scale(2, 2);
+
+          // 배경
+          ctx.fillStyle = "#faf8f3";
+          ctx.fillRect(0, 0, W, H);
+
+          // 외곽선
+          ctx.strokeStyle = "#1a1a1a";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(8, 8, W - 16, H - 16);
+
+          let y = PAD;
+
+          // 타이틀
+          ctx.font = "bold 13px sans-serif";
+          ctx.fillStyle = "#999";
+          ctx.fillText("YES or NO 타로", PAD, y + 13);
+          y += 20 + 16;
+
+          // 카드 이미지 (로드 성공한 경우만)
+          if (cardImg) {
+            const cardX = (W - CARD_W) / 2;
+            ctx.save();
+            ctx.strokeStyle = "#1a1a1a";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(cardX, y, CARD_W, CARD_H);
+            ctx.drawImage(cardImg, cardX, y, CARD_W, CARD_H);
+            ctx.restore();
+            y += CARD_H + 20;
+          }
+
+          // YES / NO
+          ctx.font = "bold 52px Georgia, serif";
+          ctx.fillStyle = "#1a1a1a";
+          ctx.fillText(c.isYes ? "YES." : "NO.", PAD, y + 48);
+          y += 64;
+
+          // confidence 뱃지
+          ctx.font = "bold 12px sans-serif";
+          const bw = ctx.measureText(c.confidence).width + 18;
+          ctx.fillStyle = "#f0ece2";
+          ctx.fillRect(PAD, y, bw, 22);
+          ctx.strokeStyle = "#1a1a1a";
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(PAD, y, bw, 22);
+          ctx.fillStyle = "#1a1a1a";
+          ctx.fillText(c.confidence, PAD + 9, y + 15);
+          y += 32;
+
+          // 질문
+          if (includeQ && qText) {
+            ctx.fillStyle = "#1a1a1a";
+            ctx.fillRect(PAD, y + 2, 3, 16);
+            ctx.font = "italic 13px sans-serif";
+            ctx.fillStyle = "#888";
+            ctx.fillText('"' + qText + '"', PAD + 10, y + 14);
+            y += 26;
+          }
+
+          // 구분선
+          ctx.strokeStyle = "#ddd";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(PAD, y);
+          ctx.lineTo(W - PAD, y);
+          ctx.stroke();
+          y += 14;
+
+          // 해석 텍스트
+          ctx.font = "14px sans-serif";
+          ctx.fillStyle = "#444";
+          for (const dl of descLines) {
+            ctx.fillText(dl, PAD, y);
+            y += 22;
+          }
+          y += 10;
+
+          // 푸터
+          ctx.strokeStyle = "#eee";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(PAD, y);
+          ctx.lineTo(W - PAD, y);
+          ctx.stroke();
+          y += 12;
+          ctx.font = "11px sans-serif";
+          ctx.fillStyle = "#bbb";
+          ctx.fillText("해결! 양자택일 타로", PAD, y + 10);
+
+          // 저장 / 공유
+          // 저장 / 공유 — 모바일만 Web Share API 사용
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(
+            navigator.userAgent,
+          );
+          if (isMobile && navigator.share && navigator.canShare) {
+            canvas.toBlob(async (blob) => {
+              const file = new File([blob], "tarot-result.png", {
+                type: "image/png",
+              });
+              if (navigator.canShare({ files: [file] })) {
+                try {
+                  await navigator.share({
+                    files: [file],
+                    title: "YES or NO 타로 결과",
+                  });
+                } catch (err) {
+                  if (err.name !== "AbortError") fallbackDownload(canvas, c);
+                }
+                return;
+              }
+              fallbackDownload(canvas, c);
+            }, "image/png");
+          } else {
+            fallbackDownload(canvas, c);
+          }
+        } catch (e) {
+          console.error("saveImage error:", e);
+          showToast("이미지 저장에 실패했습니다");
+        }
+      }
+
+      function fallbackDownload(canvas, c) {
+        console.log("fallbackDownload 진입"); // ← 추가
+
+        const link = document.createElement("a");
+        link.download = "tarot-result.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showToast("이미지가 저장되었습니다");
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2600);
+      }
+
+      // ════════════════════════════════
+      // 초기화
+      // ════════════════════════════════
+
+      // 시스템 다크모드 감지
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        dark = 1;
+        document.getElementById("app").dataset.dark = 1;
+        document.getElementById("toggleLabel").textContent = "☀️ 라이트";
+      }
+
+      // 시스템 설정 변경 시 실시간 반영
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          dark = e.matches ? 1 : 0;
+          document.getElementById("app").dataset.dark = dark;
+          document.getElementById("toggleLabel").textContent = dark
+            ? "☀️ 라이트"
+            : "🌙 다크";
+          updateDivider();
+        });
+
+      updateDivider();
+      renderQuota();
