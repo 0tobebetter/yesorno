@@ -31,6 +31,8 @@
             "오늘 세 번 물어볼 수 있어요",
             "오늘 두 번 물어볼 수 있어요",
             "마지막 질문이에요",
+            "공유 보너스! 한 번 더 뽑을 수 있어요",
+            "공유 보너스! 마지막 한 번 남았어요",
           ],
           quotaDone: "내일 다시 와주세요 🌙",
         },
@@ -44,16 +46,40 @@
         const d = new Date();
         return `quota_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
       }
+      function getBonusKey() {
+        return getTodayKey() + "_bonus";
+      }
       function getQuotaUsed() {
         return parseInt(localStorage.getItem(getTodayKey()) || "0", 10);
       }
+      function getBonusUsed() {
+        return parseInt(localStorage.getItem(getBonusKey()) || "0", 10);
+      }
+      function getMaxQuota() {
+        return 3 + Math.min(getBonusUsed(), 2); // 기본 3 + 보너스 최대 2
+      }
       function incrementQuota() {
         const k = getTodayKey();
-        localStorage.setItem(k, String(getQuotaUsed() + 1));
+        const newCount = getQuotaUsed() + 1;
+        localStorage.setItem(k, String(newCount));
+        // 뽑기 시각 기록 (간격 분석용)
+        const times = JSON.parse(localStorage.getItem(k + "_times") || "[]");
+        times.push(Date.now());
+        localStorage.setItem(k + "_times", JSON.stringify(times));
+      }
+      function getDrawTimes() {
+        const k = getTodayKey();
+        return JSON.parse(localStorage.getItem(k + "_times") || "[]");
+      }
+      function addBonusQuota() {
+        const bonus = getBonusUsed();
+        if (bonus >= 2) return false; // 하루 최대 +2
+        localStorage.setItem(getBonusKey(), String(bonus + 1));
+        return true;
       }
       function renderQuota() {
         const used = getQuotaUsed();
-        const remaining = Math.max(0, 3 - used);
+        const remaining = Math.max(0, getMaxQuota() - used);
         const dots = document.getElementById("quotaDots");
         const text = document.getElementById("quotaText");
         dots.innerHTML = "";
@@ -63,7 +89,14 @@
           dots.appendChild(d);
         }
         if (remaining > 0) {
-          text.textContent = T.quotaMsg[3 - remaining];
+          const bonus = getBonusUsed();
+          const baseRemaining = Math.max(0, 3 - getQuotaUsed());
+          if (bonus > 0 && baseRemaining <= 0) {
+            // 보너스 뽑기 중
+            text.textContent = T.quotaMsg[bonus === 1 ? 3 : 4];
+          } else {
+            text.textContent = T.quotaMsg[3 - remaining] || T.quotaMsg[0];
+          }
         } else {
           text.textContent = "오늘의 카드를 모두 뽑았어요";
         }

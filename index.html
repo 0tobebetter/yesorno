@@ -72,6 +72,30 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* ── 공유 독려 ── */
+      .share-nudge {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        margin-bottom: 0.85rem;
+        padding: 0.7rem 0.9rem;
+        border: 1.5px solid var(--border);
+        background: var(--bg2);
+        transition: all 0.2s;
+      }
+      .share-nudge-main {
+        font-family: 'IsYun', cursive;
+        font-size: 0.95rem;
+        color: var(--fg);
+        font-weight: 700;
+      }
+      .share-nudge-bonus {
+        font-family: 'IsYun', cursive;
+        font-size: 0.82rem;
+        color: var(--fg3);
+      }
+    </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -227,9 +251,11 @@
                 질문 포함해서 이미지로 저장하기
               </label>
             </div>
-            <!-- <div class="share-notice">
-              작성하신 고민은 공유되지 않고 결과만 공유됩니다
-            </div> -->
+            <!-- 공유 독려 -->
+            <div class="share-nudge">
+              <span class="share-nudge-main">친구한테도 공유해보세요!</span>
+              <span class="share-nudge-bonus">공유하면 오늘 한 번 더 뽑을 수 있어요 🎁</span>
+            </div>
             <div class="share-row">
               <button class="share-btn primary" onclick="shareToX()">
                 <svg

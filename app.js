@@ -12,7 +12,7 @@
       }
 
       function drawCard() {
-        if (drawn || getQuotaUsed() >= 3) return;
+        if (drawn || getQuotaUsed() >= getMaxQuota()) return;
         drawn = true;
         document.getElementById("drawBtn").disabled = true;
 
@@ -21,6 +21,11 @@
         const catVal = document.getElementById("catSelect").value;
         const catIdx =
           catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
+        // GA4 카테고리 선택 이벤트
+        if (catVal) {
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push({ event: "category_selected", category: catVal });
+        }
         const qText = document.getElementById("qInput")?.value.trim() || "";
 
         currentCard = {
@@ -91,6 +96,21 @@
             confidence: data.confidence,
           });
 
+          // 기본 3회 소진 시 간격 분석 이벤트
+          if (getQuotaUsed() === 3) {
+            const times = getDrawTimes();
+            if (times.length >= 3) {
+              const spanMin = Math.round((times[2] - times[0]) / 60000);
+              const avgIntervalMin = Math.round((times[2] - times[0]) / 60000 / 2);
+              dataLayer.push({
+                event: "quota_exhausted",
+                span_minutes: spanMin,
+                avg_interval_minutes: avgIntervalMin,
+                draw_count: times.length,
+              });
+            }
+          }
+
           // Supabase 저장
           saveToSupabase({
             card_name: key,
@@ -103,7 +123,7 @@
       }
 
       function resetCard() {
-        if (getQuotaUsed() >= 3) return;
+        if (getQuotaUsed() >= getMaxQuota()) return;
         drawn = false;
         document.getElementById("cardInner").classList.remove("flipped");
         document.getElementById("resultArea").classList.add("hidden");
@@ -130,6 +150,14 @@
         return `🔮 YES or NO 타로\n결과: ${c.isYes ? "YES" : "NO"} (${c.confidence})\n${c.desc}\n\nhttps://yesorno-tarot.vercel.app/ \n#타로 #양자택일타로 #yesorno`;
       }
 
+      function grantShareBonus() {
+        const granted = addBonusQuota();
+        if (granted) {
+          renderQuota();
+          setTimeout(() => showToast("🎁 보너스! 한 번 더 뽑을 수 있어요"), 500);
+        }
+      }
+
       function shareToX() {
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
@@ -140,6 +168,7 @@
           `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`,
           "_blank",
         );
+        grantShareBonus();
       }
       function shareToInstagram() {
         window.dataLayer = window.dataLayer || [];
@@ -149,6 +178,7 @@
         });
         if (navigator.clipboard) navigator.clipboard.writeText(getShareText());
         showToast("복사됨 — 인스타그램에 붙여넣기 하세요!");
+        grantShareBonus();
       }
       function copyResult() {
         window.dataLayer = window.dataLayer || [];
