@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /og-image.html
+Disallow: /og-image.png
+
+Sitemap: https://yesorno-tarot.vercel.app/sitemap.xml
