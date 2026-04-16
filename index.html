@@ -95,12 +95,38 @@
         font-size: 0.82rem;
         color: var(--fg3);
       }
+      .lang-btn {
+        background: transparent;
+        border: 1.5px solid var(--border);
+        color: var(--fg2);
+        font-family: 'Caveat', cursive;
+        font-size: 0.95rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        letter-spacing: 0.05em;
+      }
+      .lang-btn:hover {
+        background: var(--bg2);
+        color: var(--fg);
+      }
+      .share-kakao {
+        background: #FEE500;
+        border-color: #FEE500;
+        color: #1a1a1a;
+      }
+      .share-kakao:hover {
+        background: #e6cf00;
+      }
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 카카오 SDK -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.0/kakao.min.js" integrity="sha384-PFHeU/4gvSH8kpvhrigAPfZGBDPs372JfeIVTl1wLfJmLRWr9HCKE6rCTFMuMnA" crossorigin="anonymous"></script>
   </head>
   <body id="app">
     <!-- Google Tag Manager (noscript) -->
@@ -146,6 +172,7 @@
     <div class="wrap">
       <!-- 상단 바 -->
       <div class="top-bar">
+        <button class="lang-btn" id="langToggleBtn" onclick="toggleLang()">EN</button>
         <div class="toggle-wrap" onclick="toggleDark()">
           <span class="toggle-label" id="toggleLabel">🌙 다크</span>
           <div class="toggle-track"><div class="toggle-thumb"></div></div>
@@ -196,7 +223,7 @@
         </div> -->
 
         <button class="draw-btn" id="drawBtn" onclick="drawCard()">
-          카드 뽑기 →
+          <span id="drawBtnText">카드 뽑기 →</span>
         </button>
         <div class="quota-done hidden" id="quotaDone">
           내일 다시 와주세요 🌙<br /><span
@@ -253,8 +280,8 @@
             </div>
             <!-- 공유 독려 -->
             <div class="share-nudge">
-              <span class="share-nudge-main">친구한테도 공유해보세요!</span>
-              <span class="share-nudge-bonus">공유하면 오늘 한 번 더 뽑을 수 있어요 🎁</span>
+              <span class="share-nudge-main" id="shareNudgeMain">친구한테도 공유해보세요!</span>
+              <span class="share-nudge-bonus" id="shareNudgeBonus">공유하면 오늘 한 번 더 뽑을 수 있어요 🎁</span>
             </div>
             <div class="share-row">
               <button class="share-btn primary" onclick="shareToX()">
@@ -268,7 +295,7 @@
                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.734l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"
                   />
                 </svg>
-                X 공유
+                <span id="shareXText">X 공유</span>
               </button>
               <button class="share-btn" onclick="saveImage()">
                 <svg
@@ -299,6 +326,12 @@
                 인스타
               </button>
               <button class="share-btn" onclick="copyResult()">복사</button>
+              <button class="share-btn share-kakao" onclick="shareToKakao()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.7 1.44 5.1 3.66 6.6L4.8 21l4.08-2.1c1.02.27 2.1.42 3.12.42 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/>
+                </svg>
+                카카오
+              </button>
             </div>
             <button class="again-btn" id="againBtn" onclick="resetCard()">
               ↺ 다시 뽑기
@@ -308,7 +341,7 @@
       </div>
 
       <footer>
-        <a href="privacy.html">개인정보처리방침</a> · © 2026 YES or NO 타로
+        <a href="privacy.html" id="privacyLink">개인정보처리방침</a> · © 2026 YES or NO 타로
       </footer>
     </div>
 

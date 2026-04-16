@@ -18,6 +18,7 @@
 
         const key = CARD_KEYS[Math.floor(Math.random() * CARD_KEYS.length)];
         const data = DESCS[key];
+        const dataEn = DESCS_EN[key];
         const catVal = document.getElementById("catSelect").value;
         const catIdx =
           catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
@@ -27,12 +28,17 @@
           dataLayer.push({ event: "category_selected", category: catVal });
         }
         const qText = document.getElementById("qInput")?.value.trim() || "";
+        const isEn = getLang() === "en";
 
         currentCard = {
           key,
-          confidence: data.confidence,
+          confidence: isEn ? dataEn.confidence : data.confidence,
+          confidenceKo: data.confidence,
+          confidenceEn: dataEn.confidence,
           isYes: data.yes,
-          desc: data.descs[catIdx],
+          desc: isEn ? dataEn.descs[catIdx] : data.descs[catIdx],
+          descKo: data.descs[catIdx],
+          descEn: dataEn.descs[catIdx],
           cat: catVal,
         };
 
@@ -147,14 +153,14 @@
       function getShareText() {
         const c = currentCard;
         if (!c) return "";
-        return `🔮 YES or NO 타로\n결과: ${c.isYes ? "YES" : "NO"} (${c.confidence})\n${c.desc}\n\nhttps://yesorno-tarot.vercel.app/ \n#타로 #양자택일타로 #yesorno`;
+        return I18N[getLang()].shareText(c);
       }
 
       function grantShareBonus() {
         const granted = addBonusQuota();
         if (granted) {
           renderQuota();
-          setTimeout(() => showToast("🎁 보너스! 한 번 더 뽑을 수 있어요"), 500);
+          setTimeout(() => showToast(I18N[getLang()].toastBonus), 500);
         }
       }
 
@@ -177,7 +183,7 @@
           method: "instagram",
         });
         if (navigator.clipboard) navigator.clipboard.writeText(getShareText());
-        showToast("복사됨 — 인스타그램에 붙여넣기 하세요!");
+        showToast(I18N[getLang()].toastInstaCopied);
         grantShareBonus();
       }
       function copyResult() {
@@ -190,7 +196,7 @@
         if (navigator.clipboard)
           navigator.clipboard
             .writeText(t)
-            .then(() => showToast("복사되었습니다"));
+            .then(() => showToast(I18N[getLang()].toastCopied));
         else {
           const ta = document.createElement("textarea");
           ta.value = t;
@@ -198,7 +204,7 @@
           ta.select();
           document.execCommand("copy");
           document.body.removeChild(ta);
-          showToast("복사되었습니다");
+          showToast(I18N[getLang()].toastCopied);
         }
       }
       async function saveImage() {
@@ -207,7 +213,7 @@
 
         const c = currentCard;
         if (!c) {
-          showToast("먼저 카드를 뽑아주세요");
+          showToast(I18N[getLang()].toastKakaoLoading);
           return;
         }
 
@@ -216,7 +222,7 @@
           document.getElementById("includeQCheck") &&
           document.getElementById("includeQCheck").checked &&
           qText;
-        showToast("이미지 생성 중...");
+        showToast(I18N[getLang()].toastGenerating);
 
         try {
           const W = 400,
@@ -405,7 +411,7 @@
           }
         } catch (e) {
           console.error("saveImage error:", e);
-          showToast("이미지 저장에 실패했습니다");
+          showToast(I18N[getLang()].toastFailed);
         }
       }
 
@@ -416,7 +422,25 @@
         link.download = "tarot-result.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
-        showToast("이미지가 저장되었습니다");
+        showToast(I18N[getLang()].toastSaved);
+      }
+
+      // ════════════════════════════════
+      // 언어 전환
+      // ════════════════════════════════
+      function toggleLang() {
+        const newLang = getLang() === "ko" ? "en" : "ko";
+        setLang(newLang);
+        renderQuota();
+        if (currentCard) {
+          const isEn = newLang === "en";
+          currentCard.confidence = isEn ? currentCard.confidenceEn : currentCard.confidenceKo;
+          currentCard.desc = isEn ? currentCard.descEn : currentCard.descKo;
+          document.getElementById("resultBadge").textContent = currentCard.confidence;
+          document.getElementById("resultDesc").textContent = currentCard.desc;
+          document.getElementById("sc-badge").textContent = currentCard.confidence;
+          document.getElementById("sc-desc").textContent = currentCard.desc;
+        }
       }
 
       function showToast(msg) {
@@ -454,3 +478,4 @@
 
       updateDivider();
       renderQuota();
+      applyLang();
