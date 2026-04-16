@@ -11,14 +11,27 @@
           "char-count" + (v >= 100 ? " over" : v >= 80 ? " warn" : "");
       }
 
+      // 뽑기 시각 기록 (간격 분석용)
+      function getDrawTimesKey() { return getTodayKey() + "_times"; }
+      function getDrawTimes() {
+        try { return JSON.parse(localStorage.getItem(getDrawTimesKey()) || "[]"); }
+        catch (e) { return []; }
+      }
+      function recordDrawTime() {
+        const times = getDrawTimes();
+        times.push(Date.now());
+        localStorage.setItem(getDrawTimesKey(), JSON.stringify(times));
+      }
+
       function drawCard() {
         if (drawn || getQuotaUsed() >= getMaxQuota()) return;
         drawn = true;
         document.getElementById("drawBtn").disabled = true;
 
+        recordDrawTime();
         const key = CARD_KEYS[Math.floor(Math.random() * CARD_KEYS.length)];
         const data = DESCS[key];
-        const dataEn = DESCS_EN[key];
+        const dataEn = (typeof DESCS_EN !== "undefined" && DESCS_EN[key]) ? DESCS_EN[key] : { confidence: data.confidence, descs: data.descs };
         const catVal = document.getElementById("catSelect").value;
         const catIdx =
           catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
@@ -423,6 +436,68 @@
         link.href = canvas.toDataURL("image/png");
         link.click();
         showToast(I18N[getLang()].toastSaved);
+      }
+
+      // ════════════════════════════════
+      // 카카오 공유
+      // ════════════════════════════════
+      function shareToKakao() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ event: "share_result", method: "kakao" });
+
+        const c = currentCard;
+        if (!c) return;
+
+        if (typeof Kakao === "undefined" || !Kakao.isInitialized) {
+          showToast(I18N[getLang()].toastKakaoLoading);
+          // SDK 로드 대기 후 재시도
+          const tryInit = setInterval(() => {
+            if (typeof Kakao !== "undefined") {
+              clearInterval(tryInit);
+              Kakao.init("d661394f4398fbc9ec3574508826a844");
+              doKakaoShare(c);
+            }
+          }, 300);
+          setTimeout(() => clearInterval(tryInit), 5000);
+          return;
+        }
+
+        if (!Kakao.isInitialized()) {
+          Kakao.init("d661394f4398fbc9ec3574508826a844");
+        }
+        doKakaoShare(c);
+        grantShareBonus();
+      }
+
+      function doKakaoShare(c) {
+        const isEn = getLang() === "en";
+        const desc = c.desc || "";
+        const verdict = c.isYes ? "YES" : "NO";
+        const title = isEn
+          ? `YES or NO Tarot — ${verdict} (${c.confidence})`
+          : `YES or NO 타로 — ${verdict} (${c.confidence})`;
+
+        Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title: title,
+            description: desc.length > 80 ? desc.slice(0, 80) + "…" : desc,
+            imageUrl: "https://yesorno-tarot.vercel.app/og-image.png",
+            link: {
+              mobileWebUrl: "https://yesorno-tarot.vercel.app/",
+              webUrl: "https://yesorno-tarot.vercel.app/",
+            },
+          },
+          buttons: [
+            {
+              title: isEn ? "Try it yourself" : "나도 뽑아보기",
+              link: {
+                mobileWebUrl: "https://yesorno-tarot.vercel.app/",
+                webUrl: "https://yesorno-tarot.vercel.app/",
+              },
+            },
+          ],
+        });
       }
 
       // ════════════════════════════════

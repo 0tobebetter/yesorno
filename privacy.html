@@ -3,474 +3,284 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>개인정보처리방침 | YES or NO 타로</title>
-    <style>
-      @font-face {
-        font-family: "Noto Sans KR";
-        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff")
-          format("woff");
-        font-weight: normal;
-        font-display: swap;
-      }
-    </style>
+    <title>개인정보처리방침 / Privacy Policy — YES or NO 타로</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto Sans KR:wght@300;400;700&family=Caveat:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
       :root {
         --bg: #faf8f3;
-        --bg2: #f0ece2;
         --fg: #1a1a1a;
         --fg2: #555;
-        --fg3: #999;
-        --border: #1a1a1a;
-        --btn-bg: #1a1a1a;
-        --btn-fg: #faf8f3;
-        --shadow: 3px 3px 0 #1a1a1a;
+        --fg3: #888;
+        --border: #ddd;
+        --bg2: #f0ece2;
+        --accent: #ff3b00;
       }
       [data-dark="1"] {
-        --bg: #141210;
-        --bg2: #1e1b17;
+        --bg: #18181a;
         --fg: #f0ece2;
         --fg2: #bbb;
-        --fg3: #666;
-        --border: #f0ece2;
-        --btn-bg: #f0ece2;
-        --btn-fg: #141210;
-        --shadow: 3px 3px 0 #f0ece2;
+        --fg3: #777;
+        --border: #333;
+        --bg2: #222224;
+        --accent: #ff5533;
       }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
       body {
         background: var(--bg);
         color: var(--fg);
-        font-family: "Noto Sans KR", sans-serif;
+        font-family: 'Caveat', 'Noto Sans KR', sans-serif;
         min-height: 100vh;
-        transition:
-          background 0.25s,
-          color 0.25s;
-      }
-      .wrap {
-        max-width: 640px;
-        margin: 0 auto;
-        padding: 2rem 1.4rem 5rem;
+        padding: 0 0 4rem;
+        transition: background 0.2s, color 0.2s;
       }
       .top-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
+        padding: 1rem 1.5rem 0.5rem;
+        max-width: 680px;
+        margin: 0 auto;
       }
       .back-link {
-        font-family: "Noto Sans KR", cursive;
+        font-family: 'Caveat', cursive;
         font-size: 1rem;
         color: var(--fg2);
         text-decoration: none;
-        transition: color 0.2s;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1px;
       }
-      .back-link:hover {
-        color: var(--fg);
-      }
-      .toggle-wrap {
+      .back-link:hover { color: var(--fg); }
+      .controls {
         display: flex;
+        gap: 0.6rem;
         align-items: center;
-        gap: 0.45rem;
-        cursor: pointer;
-        user-select: none;
       }
-      .toggle-label {
-        font-family: "Noto Sans KR", cursive;
-        font-size: 0.9rem;
+      .lang-toggle {
+        background: transparent;
+        border: 1.5px solid var(--border);
         color: var(--fg2);
-      }
-      .toggle-track {
-        width: 40px;
-        height: 22px;
-        background: var(--bg2);
-        border: 1.5px solid var(--border);
-        border-radius: 999px;
-        position: relative;
-      }
-      .toggle-thumb {
-        width: 13px;
-        height: 13px;
-        background: var(--fg);
-        border-radius: 50%;
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        transition: transform 0.2s;
-      }
-      [data-dark="1"] .toggle-thumb {
-        transform: translateX(17px);
-      }
-      .page-title {
-        font-family: "Caveat", cursive;
-        font-weight: 700;
-        font-size: 2.4rem;
-        color: var(--fg);
-        line-height: 1;
-        margin-bottom: 0.3rem;
-      }
-      .page-updated {
-        font-family: "Noto Sans KR", cursive;
-        font-size: 0.88rem;
-        color: var(--fg3);
-        margin-bottom: 2rem;
-      }
-      .summary-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        margin-bottom: 2rem;
-      }
-      .summary-card {
-        padding: 0.85rem 1rem;
-        border: 1.5px solid var(--border);
-        background: var(--bg2);
-        transition: all 0.2s;
-      }
-      .summary-card .sc-label {
-        font-family: "Noto Sans KR", cursive;
-        font-size: 0.75rem;
-        color: var(--fg3);
-        margin-bottom: 0.3rem;
-      }
-      .summary-card .sc-value {
-        font-family: "Noto Sans KR", cursive;
+        font-family: 'Caveat', cursive;
         font-size: 0.95rem;
-        color: var(--fg);
         font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        cursor: pointer;
+        transition: all 0.15s;
       }
-      .ok .sc-value {
-        color: #2a7a2a;
-      }
-      .warn .sc-value {
-        color: #b85c00;
-      }
-      [data-dark="1"] .ok .sc-value {
-        color: #6ee89a;
-      }
-      [data-dark="1"] .warn .sc-value {
-        color: #f0b070;
-      }
-      .section {
-        margin-bottom: 2rem;
-      }
-      .section-title {
-        font-family: "Noto Sans KR", cursive;
-        font-weight: 700;
-        font-size: 1.05rem;
-        color: var(--fg);
-        margin-bottom: 0.6rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .section-title::before {
-        content: "";
-        display: inline-block;
-        width: 3px;
-        height: 1em;
-        background: var(--fg);
-      }
-      p,
-      li {
-        font-family: "Noto Sans KR", sans-serif;
-        font-size: 0.9rem;
-        color: var(--fg2);
-        line-height: 1.85;
-        transition: color 0.2s;
-      }
-      ul {
-        padding-left: 1.2rem;
-        margin-top: 0.4rem;
-      }
-      li {
-        margin-bottom: 0.25rem;
-      }
-      a {
-        color: var(--fg);
-        text-underline-offset: 3px;
-      }
-      .notice-box {
-        background: var(--bg2);
+      .lang-toggle:hover { background: var(--bg2); color: var(--fg); }
+      .dark-toggle {
+        background: transparent;
         border: 1.5px solid var(--border);
-        padding: 0.85rem 1rem;
-        margin-top: 0.6rem;
-        font-family: "Noto Sans KR", cursive;
-        font-size: 0.92rem;
         color: var(--fg2);
-        line-height: 1.7;
-        transition: all 0.2s;
-      }
-      .consent-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 0.75rem;
+        font-family: 'Caveat', cursive;
         font-size: 0.85rem;
+        padding: 0.2rem 0.6rem;
+        cursor: pointer;
+        transition: all 0.15s;
       }
-      .consent-table th {
-        font-family: "Noto Sans KR", cursive;
+      .dark-toggle:hover { background: var(--bg2); }
+
+      .wrap {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+      h1 {
+        font-family: 'Caveat', cursive;
+        font-size: 2rem;
         font-weight: 700;
-        padding: 0.5rem 0.75rem;
-        border: 1.5px solid var(--border);
-        background: var(--bg2);
-        color: var(--fg);
-        text-align: left;
+        margin-bottom: 0.3rem;
+        letter-spacing: -0.01em;
       }
-      .consent-table td {
-        padding: 0.5rem 0.75rem;
-        border: 1px solid var(--border);
-        color: var(--fg2);
-        font-family: "Noto Sans KR", sans-serif;
-        vertical-align: top;
-      }
-      .tag-yes {
-        color: #2a7a2a;
-        font-weight: 700;
-      }
-      .tag-no {
-        color: #b85c00;
-        font-weight: 700;
-      }
-      .tag-anon {
-        color: #1a5fb0;
-        font-weight: 700;
-      }
-      [data-dark="1"] .tag-yes {
-        color: #6ee89a;
-      }
-      [data-dark="1"] .tag-no {
-        color: #f0b070;
-      }
-      [data-dark="1"] .tag-anon {
-        color: #7ec8e3;
-      }
-      svg.divider {
-        width: 100%;
-        height: 18px;
-        margin: 1.5rem 0;
-        overflow: visible;
-      }
-      .back-btn {
-        display: inline-block;
-        margin-top: 1.5rem;
-        background: var(--btn-bg);
-        color: var(--btn-fg);
-        font-family: "Noto Sans KR", cursive;
-        font-size: 1rem;
-        font-weight: 700;
-        padding: 0.65rem 1.6rem;
-        border: 1.5px solid var(--border);
-        text-decoration: none;
-        box-shadow: var(--shadow);
-        transition:
-          transform 0.1s,
-          box-shadow 0.1s;
-      }
-      .back-btn:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 4px 4px 0 var(--border);
-      }
-      footer {
-        margin-top: 3rem;
-        text-align: center;
-        font-family: "Noto Sans KR", cursive;
-        font-size: 0.82rem;
+      .updated {
+        font-size: 0.85rem;
         color: var(--fg3);
+        margin-bottom: 2rem;
+        font-family: sans-serif;
       }
-      code {
-        background: var(--bg2);
-        padding: 0.1rem 0.35rem;
-        font-size: 0.82rem;
-        border: 1px solid var(--border);
+      h2 {
+        font-family: 'Caveat', cursive;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 2rem 0 0.6rem;
+        border-bottom: 1.5px solid var(--border);
+        padding-bottom: 0.3rem;
       }
+      p, li {
+        font-family: sans-serif;
+        font-size: 0.92rem;
+        line-height: 1.75;
+        color: var(--fg2);
+        margin-bottom: 0.5rem;
+      }
+      ul { padding-left: 1.2rem; margin-bottom: 0.5rem; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .section { margin-bottom: 0.5rem; }
+
+      /* 언어 전환 */
+      .ko-content { display: block; }
+      .en-content { display: none; }
+      [data-lang="en"] .ko-content { display: none; }
+      [data-lang="en"] .en-content { display: block; }
     </style>
   </head>
   <body id="privacyApp">
-    <div class="wrap">
-      <div class="top-bar">
-        <a href="index.html" class="back-link">← 타로로 돌아가기</a>
-        <div class="toggle-wrap" onclick="toggleDark()">
-          <span class="toggle-label" id="toggleLabel">🌙 다크</span>
-          <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        </div>
+    <div class="top-bar">
+      <a href="index.html" class="back-link">← YES or NO 타로</a>
+      <div class="controls">
+        <button class="lang-toggle" id="langBtn" onclick="toggleLang()">EN</button>
+        <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙</button>
       </div>
-
-      <div class="page-title">개인정보처리방침</div>
-      <div class="page-updated">최종 업데이트: 2026년 4월</div>
-
-      <div class="summary-grid">
-        <div class="summary-card ok">
-          <div class="sc-label">카드 결과 · 카테고리</div>
-          <div class="sc-value">✅ 동의 없이 수집</div>
-        </div>
-        <div class="summary-card ok">
-          <div class="sc-label">질문 텍스트</div>
-          <div class="sc-value">✅ 입력 시만 수집</div>
-        </div>
-        <div class="summary-card">
-          <div class="sc-label">익명 통계 모델링</div>
-          <div class="sc-value">📊 항상 (비식별)</div>
-        </div>
-        <div class="summary-card warn">
-          <div class="sc-label">GA4 쿠키 추적</div>
-          <div class="sc-value">🍪 동의 시만</div>
-        </div>
-      </div>
-
-      <svg class="divider" viewBox="0 0 600 18" preserveAspectRatio="none">
-        <path
-          id="div1"
-          d="M0 9 Q75 3 150 9 Q225 15 300 9 Q375 3 450 9 Q525 15 600 9"
-          fill="none"
-          stroke="#1a1a1a"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-      </svg>
-
-      <div class="section">
-        <div class="section-title">1. 수집하는 정보와 근거</div>
-        <div class="notice-box">
-          작성하신 고민 내용은 공유되지 않으며, 결과(카드명·YES/NO)만
-          저장됩니다.
-        </div>
-        <table class="consent-table" style="margin-top: 1rem">
-          <thead>
-            <tr>
-              <th>수집 항목</th>
-              <th>수집 조건</th>
-              <th>법적 근거</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>카드명, 카테고리, YES/NO 결과</td>
-              <td><span class="tag-yes">항상 수집</span></td>
-              <td>서비스 운영 정당한 이익</td>
-            </tr>
-            <tr>
-              <td>질문 텍스트 (100자 이내)</td>
-              <td><span class="tag-yes">입력한 경우만</span></td>
-              <td>서비스 개선 정당한 이익</td>
-            </tr>
-            <tr>
-              <td>GA4 익명 통계 모델링</td>
-              <td><span class="tag-anon">항상 (비식별)</span></td>
-              <td>Consent Mode v2 — 쿠키 미사용</td>
-            </tr>
-            <tr>
-              <td>GA4 쿠키 기반 완전 추적</td>
-              <td><span class="tag-no">동의 시만</span></td>
-              <td>정보주체 동의</td>
-            </tr>
-            <tr>
-              <td>광고 쿠키 (애드센스)</td>
-              <td><span class="tag-no">동의 시만</span></td>
-              <td>정보주체 동의</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="section">
-        <div class="section-title">2. Google Consent Mode v2</div>
-        <p>
-          이 사이트는 Google Consent Mode v2를 적용하고 있습니다. 쿠키 동의
-          여부와 관계없이 Google은 <strong>쿠키 없이</strong> 익명화된 통계
-          신호를 수집하여 리포트를 모델링합니다. 이 과정에서 개인을 식별하는
-          데이터는 수집되지 않습니다.
-        </p>
-        <div class="notice-box">
-          동의 거부 시: 쿠키 추적 없음 · 개인 식별 없음 · 익명 집계 신호만
-          전송<br />
-          동의 시: GA4 전체 기능 활성화 · 행동 데이터 수집
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">3. 쿠키 동의 철회</div>
-        <p>
-          동의는 언제든지 철회할 수 있습니다. 브라우저 개발자 도구 → Application
-          → Local Storage에서 <code>cookie_consent</code> 항목을 삭제하면 다음
-          방문 시 다시 선택할 수 있습니다.
-        </p>
-      </div>
-
-      <div class="section">
-        <div class="section-title">4. 제3자 서비스</div>
-        <ul>
-          <li>
-            <strong>Google Analytics 4</strong> — 방문 통계.
-            <a href="https://policies.google.com/privacy" target="_blank"
-              >Google 개인정보처리방침</a
-            >
-          </li>
-          <li>
-            <strong>Supabase</strong> — 카드 결과 저장.
-            <a href="https://supabase.com/privacy" target="_blank"
-              >Supabase 개인정보처리방침</a
-            >
-          </li>
-          <li>
-            <strong>Google AdSense</strong> — 광고 표시 (적용 시). 동의한
-            경우에만 맞춤 광고 제공
-          </li>
-        </ul>
-      </div>
-
-      <div class="section">
-        <div class="section-title">5. GDPR (유럽 사용자)</div>
-        <p>
-          유럽경제지역(EEA) 거주자는 GDPR에 따라 수집된 데이터에 대한
-          열람·삭제·처리 제한을 요청할 권리가 있습니다.
-        </p>
-      </div>
-
-      <div class="section">
-        <div class="section-title">6. 미성년자</div>
-        <p>
-          이 사이트는 만 13세 미만 아동을 대상으로 하지 않으며, 해당 연령의
-          개인정보를 의도적으로 수집하지 않습니다.
-        </p>
-      </div>
-
-      <div class="section">
-        <div class="section-title">7. 방침 변경</div>
-        <p>방침이 변경될 경우 이 페이지에 업데이트 날짜와 함께 공지합니다.</p>
-      </div>
-
-      <a href="index.html" class="back-btn">← 타로로 돌아가기</a>
-      <footer style="margin-top: 2rem">© 2026 YES or NO 타로</footer>
     </div>
+
+    <div class="wrap">
+
+      <!-- ══ 한국어 ══ -->
+      <div class="ko-content">
+        <h1>개인정보처리방침</h1>
+        <p class="updated">최종 업데이트: 2026년 1월 1일</p>
+
+        <div class="section">
+          <h2>1. 수집하는 정보</h2>
+          <p>YES or NO 타로(이하 "서비스")는 다음 정보를 수집합니다.</p>
+          <ul>
+            <li><strong>자동 수집 정보:</strong> 방문 기록, 기기 정보, IP 주소, 브라우저 종류 등 Google Analytics를 통해 수집되는 통계 데이터</li>
+            <li><strong>사용자 입력 정보:</strong> 고민 카테고리 선택값 (질문 텍스트는 수집하지 않습니다)</li>
+            <li><strong>로컬 저장 정보:</strong> 일일 뽑기 횟수, 언어 설정, 쿠키 동의 여부 — 기기 내 localStorage에만 저장되며 외부 서버로 전송되지 않습니다</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>2. 정보의 이용 목적</h2>
+          <ul>
+            <li>서비스 이용 통계 및 기능 개선</li>
+            <li>일일 뽑기 횟수 제한 기능 제공</li>
+            <li>Supabase를 통한 익명 카드 결과 집계 (카드명, 카테고리, YES/NO 결과만 저장)</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>3. 제3자 서비스</h2>
+          <p>본 서비스는 다음 제3자 서비스를 사용합니다.</p>
+          <ul>
+            <li><strong>Google Analytics (GA4):</strong> 방문 통계 수집. <a href="https://policies.google.com/privacy" target="_blank">Google 개인정보처리방침</a></li>
+            <li><strong>Google Tag Manager:</strong> 태그 관리</li>
+            <li><strong>Supabase:</strong> 익명 데이터 저장. <a href="https://supabase.com/privacy" target="_blank">Supabase 개인정보처리방침</a></li>
+            <li><strong>카카오 SDK:</strong> 카카오톡 공유 기능 제공. <a href="https://www.kakao.com/policy/privacy" target="_blank">카카오 개인정보처리방침</a></li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>4. 쿠키 및 동의</h2>
+          <p>서비스 첫 방문 시 쿠키 동의 배너가 표시됩니다. 동의하시면 Google Analytics가 활성화되고, 거부하시면 분석 쿠키는 수집되지 않습니다. 기능상 필수 정보(뽑기 횟수 등)는 동의 여부와 관계없이 localStorage에 저장됩니다.</p>
+        </div>
+
+        <div class="section">
+          <h2>5. 데이터 보유 및 삭제</h2>
+          <p>Google Analytics 데이터는 Google 정책에 따라 최대 14개월간 보유됩니다. 기기 내 localStorage 데이터는 브라우저 설정에서 직접 삭제하실 수 있습니다.</p>
+        </div>
+
+        <div class="section">
+          <h2>6. 개인정보 처리 책임자</h2>
+          <p>서비스 운영 관련 문의는 서비스 내 이메일로 연락해 주세요.</p>
+        </div>
+
+        <div class="section">
+          <h2>7. 방침 변경</h2>
+          <p>본 방침은 변경될 수 있으며, 변경 시 이 페이지에 업데이트됩니다.</p>
+        </div>
+      </div>
+
+      <!-- ══ English ══ -->
+      <div class="en-content">
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: January 1, 2026</p>
+
+        <div class="section">
+          <h2>1. Information We Collect</h2>
+          <p>YES or NO Tarot ("the Service") collects the following information:</p>
+          <ul>
+            <li><strong>Automatically collected data:</strong> Visit logs, device information, IP address, browser type — statistical data collected via Google Analytics.</li>
+            <li><strong>User input:</strong> The category you select for your reading. We do not collect any free-text questions you type.</li>
+            <li><strong>Locally stored data:</strong> Daily draw count, language preference, and cookie consent status — stored only in your browser's localStorage and never transmitted to external servers.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>2. How We Use Information</h2>
+          <ul>
+            <li>To understand how the Service is used and improve its features</li>
+            <li>To enforce the daily draw limit</li>
+            <li>To aggregate anonymous card results via Supabase (card name, category, and YES/NO result only — no personal identifiers)</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>3. Third-Party Services</h2>
+          <p>The Service uses the following third-party providers:</p>
+          <ul>
+            <li><strong>Google Analytics (GA4):</strong> Usage statistics. <a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a></li>
+            <li><strong>Google Tag Manager:</strong> Tag management</li>
+            <li><strong>Supabase:</strong> Anonymous data storage. <a href="https://supabase.com/privacy" target="_blank">Supabase Privacy Policy</a></li>
+            <li><strong>KakaoTalk SDK:</strong> Social sharing feature. <a href="https://www.kakao.com/policy/privacy" target="_blank">Kakao Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>4. Cookies &amp; Consent</h2>
+          <p>A cookie consent banner is shown on your first visit. If you accept, Google Analytics is enabled. If you decline, no analytics cookies are set. Functional data (such as your draw count) is always stored in localStorage regardless of your choice.</p>
+        </div>
+
+        <div class="section">
+          <h2>5. Data Retention &amp; Deletion</h2>
+          <p>Google Analytics data is retained for up to 14 months in accordance with Google's policies. You can clear localStorage data at any time through your browser settings.</p>
+        </div>
+
+        <div class="section">
+          <h2>6. Contact</h2>
+          <p>For any questions about this policy or the Service, please reach out via the contact email listed on the site.</p>
+        </div>
+
+        <div class="section">
+          <h2>7. Changes to This Policy</h2>
+          <p>This policy may be updated from time to time. Any changes will be reflected on this page.</p>
+        </div>
+      </div>
+
+    </div>
+
     <script>
+      // 다크모드
       let dark = 0;
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        dark = 1;
+        document.getElementById("privacyApp").dataset.dark = 1;
+        document.getElementById("darkBtn").textContent = "☀️";
+      }
       function toggleDark() {
         dark = dark ? 0 : 1;
         document.getElementById("privacyApp").dataset.dark = dark;
-        document.getElementById("toggleLabel").textContent = dark
-          ? "☀️ 라이트"
-          : "🌙 다크";
-        document
-          .getElementById("div1")
-          .setAttribute("stroke", dark ? "#f0ece2" : "#1a1a1a");
+        document.getElementById("darkBtn").textContent = dark ? "☀️" : "🌙";
       }
-      if (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
-        dark = 1;
-        document.getElementById("privacyApp").dataset.dark = 1;
-        document.getElementById("toggleLabel").textContent = "☀️ 라이트";
-        document.getElementById("div1").setAttribute("stroke", "#f0ece2");
+
+      // 언어
+      const savedLang = localStorage.getItem("lang");
+      let currentLang = savedLang || ((navigator.language || "ko").startsWith("ko") ? "ko" : "en");
+      function applyLang() {
+        document.getElementById("privacyApp").dataset.lang = currentLang;
+        document.getElementById("langBtn").textContent = currentLang === "ko" ? "EN" : "한";
+        document.documentElement.lang = currentLang;
       }
+      function toggleLang() {
+        currentLang = currentLang === "ko" ? "en" : "ko";
+        localStorage.setItem("lang", currentLang);
+        applyLang();
+      }
+      applyLang();
     </script>
   </body>
 </html>
