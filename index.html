@@ -73,6 +73,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="style.css" />
     <style>
+      /* ── 한/영 슬라이더: EN일 때 thumb 오른쪽 ── */
+      #langToggleWrap[data-active="1"] .toggle-thumb {
+        transform: translateX(18px);
+      }
       /* ── 공유 독려 ── */
       .share-nudge {
         display: flex;
@@ -95,22 +99,7 @@
         font-size: 0.82rem;
         color: var(--fg3);
       }
-      .lang-btn {
-        background: transparent;
-        border: 1.5px solid var(--border);
-        color: var(--fg2);
-        font-family: 'Caveat', cursive;
-        font-size: 0.95rem;
-        font-weight: 700;
-        padding: 0.2rem 0.6rem;
-        cursor: pointer;
-        transition: all 0.15s;
-        letter-spacing: 0.05em;
-      }
-      .lang-btn:hover {
-        background: var(--bg2);
-        color: var(--fg);
-      }
+      /* ── 카카오 버튼 ── */
       .share-kakao {
         background: #FEE500;
         border-color: #FEE500;
@@ -172,7 +161,10 @@
     <div class="wrap">
       <!-- 상단 바 -->
       <div class="top-bar">
-        <button class="lang-btn" id="langToggleBtn" onclick="toggleLang()">EN</button>
+        <div class="toggle-wrap" id="langToggleWrap" data-active="0" onclick="toggleLang()">
+          <span class="toggle-label" id="langLabel">한</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
         <div class="toggle-wrap" onclick="toggleDark()">
           <span class="toggle-label" id="toggleLabel">🌙 다크</span>
           <div class="toggle-track"><div class="toggle-thumb"></div></div>
@@ -197,7 +189,7 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
         </div>
 
-        <div class="field-label">고민 종류 (선택 사항)</div>
+        <div class="field-label" id="fieldLabelCat">고민 종류 (선택 사항)</div>
         <select class="category-select" id="catSelect">
           <option value="">선택 안 함</option>
           <option value="연애">💕 연애</option>

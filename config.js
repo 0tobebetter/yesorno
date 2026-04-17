@@ -23,7 +23,7 @@
       }
 
       // ════════════════════════════════
-      // 다국어 (현재 ko만 — en/ja는 키만 추가)
+      // 다국어
       // ════════════════════════════════
       const I18N = {
         ko: {
@@ -35,6 +35,7 @@
             "공유 보너스! 마지막 한 번 남았어요",
           ],
           quotaDone: "내일 다시 와주세요 🌙",
+          quotaAllUsed: "오늘의 카드를 모두 뽑았어요",
           title: "YES or NO",
           subtitle: "해결! 양자택일타로",
           categoryLabel: "고민 종류 (선택 사항)",
@@ -73,8 +74,9 @@ ${c.desc}
 https://yesorno-tarot.vercel.app/ 
 #타로 #양자택일타로 #yesorno`,
           privacyLink: "개인정보처리방침",
-          langToggle: "EN",
           darkToggle: ["🌙 다크", "☀️ 라이트"],
+          scFooter: "해결! 양자택일 타로",
+          langLabel: "한",
         },
         en: {
           quotaMsg: [
@@ -85,6 +87,7 @@ https://yesorno-tarot.vercel.app/
             "Bonus draw! Last one",
           ],
           quotaDone: "Come back tomorrow 🌙",
+          quotaAllUsed: "You've used all your draws for today",
           title: "YES or NO",
           subtitle: "Let the tarot decide",
           categoryLabel: "Topic (optional)",
@@ -123,50 +126,75 @@ ${c.desc}
 https://yesorno-tarot.vercel.app/ 
 #tarot #yesorno`,
           privacyLink: "Privacy Policy",
-          langToggle: "한",
           darkToggle: ["🌙 Dark", "☀️ Light"],
+          scFooter: "YES or NO Tarot",
+          langLabel: "EN",
         },
       };
 
-      // 언어 감지 및 전환
-      let currentLang = (navigator.language || "ko").startsWith("ko") ? "ko" : "en";
+      // ════════════════════════════════
+      // 언어 상태 — getT()로만 참조, T 상수 제거
+      // ════════════════════════════════
+      let currentLang = "ko";
       function getLang() { return currentLang; }
+      function getT() { return I18N[currentLang]; }
+
       function setLang(lang) {
         currentLang = lang;
         localStorage.setItem("lang", lang);
         applyLang();
       }
+
       function applyLang() {
-        const t = I18N[currentLang];
-        // 카테고리 옵션 텍스트 업데이트
+        const t = getT();
+
+        // html lang 속성
+        document.documentElement.lang = currentLang;
+
+        // 카테고리 옵션
         const catSelect = document.getElementById("catSelect");
         if (catSelect) {
           Array.from(catSelect.options).forEach(opt => {
             const label = t.categories[opt.value];
-            if (label) opt.textContent = label;
+            if (label !== undefined) opt.textContent = label;
           });
         }
-        // UI 텍스트 업데이트
+
+        // 정적 텍스트 ID 매핑
         const els = {
-          "drawBtnText": t.drawBtn,
-          "shareNudgeMain": t.shareNudgeMain,
+          "drawBtnText":     t.drawBtn,
+          "shareNudgeMain":  t.shareNudgeMain,
           "shareNudgeBonus": t.shareNudgeBonus,
-          "privacyLink": t.privacyLink,
-          "langToggleBtn": t.langToggle,
+          "privacyLink":     t.privacyLink,
+          "fieldLabelCat":   t.categoryLabel,
         };
         Object.entries(els).forEach(([id, text]) => {
           const el = document.getElementById(id);
           if (el) el.textContent = text;
         });
-        // 다크모드 토글 레이블
+
+        // 다크모드 토글 레이블 (언어 전환 시에도 현재 모드 기준)
         const toggleLabel = document.getElementById("toggleLabel");
         if (toggleLabel) {
           const isDark = document.getElementById("app")?.dataset.dark === "1";
           toggleLabel.textContent = t.darkToggle[isDark ? 1 : 0];
         }
+
+        // 한/영 슬라이더: 레이블 + active 상태
+        const langLabel = document.getElementById("langLabel");
+        if (langLabel) langLabel.textContent = t.langLabel;
+        const langWrap = document.getElementById("langToggleWrap");
+        if (langWrap) langWrap.dataset.active = currentLang === "en" ? "1" : "0";
+
+        // 공유 이미지 푸터
+        const scFooter = document.getElementById("sc-footer");
+        if (scFooter) scFooter.textContent = `https://yesorno-tarot.vercel.app/ · ${t.scFooter}`;
+
+        // quota UI도 현재 언어로 갱신
+        renderQuota();
       }
-      const T = I18N[currentLang];
-      // localStorage 언어 설정 우선
+
+      // 초기 언어 결정 (localStorage > 브라우저 언어)
       (function initLang() {
         const saved = localStorage.getItem("lang");
         if (saved && I18N[saved]) currentLang = saved;
@@ -174,77 +202,81 @@ https://yesorno-tarot.vercel.app/
       })();
 
       // ════════════════════════════════
-      // 날짜별 3회 제한 (자정 기준)
+      // 날짜별 3회 제한
       // ════════════════════════════════
       function getTodayKey() {
         const d = new Date();
         return `quota_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
       }
-      function getBonusKey() {
-        return getTodayKey() + "_bonus";
-      }
+      function getBonusKey() { return getTodayKey() + "_bonus"; }
       function getQuotaUsed() {
         return parseInt(localStorage.getItem(getTodayKey()) || "0", 10);
       }
       function getBonusUsed() {
         return parseInt(localStorage.getItem(getBonusKey()) || "0", 10);
       }
-      function getMaxQuota() {
-        return 3 + Math.min(getBonusUsed(), 2); // 기본 3 + 보너스 최대 2
-      }
+      function getMaxQuota() { return 3 + Math.min(getBonusUsed(), 2); }
       function incrementQuota() {
-        const k = getTodayKey();
-        localStorage.setItem(k, String(getQuotaUsed() + 1));
+        localStorage.setItem(getTodayKey(), String(getQuotaUsed() + 1));
       }
       function addBonusQuota() {
         const bonus = getBonusUsed();
-        if (bonus >= 2) return false; // 하루 최대 +2
+        if (bonus >= 2) return false;
         localStorage.setItem(getBonusKey(), String(bonus + 1));
         return true;
       }
+
       function renderQuota() {
+        const t = getT(); // 매번 현재 언어 참조
         const used = getQuotaUsed();
         const remaining = Math.max(0, getMaxQuota() - used);
+
         const dots = document.getElementById("quotaDots");
         const text = document.getElementById("quotaText");
+        if (!dots || !text) return;
+
         dots.innerHTML = "";
         for (let i = 0; i < 3; i++) {
           const d = document.createElement("div");
           d.className = "quota-dot" + (i < remaining ? "" : " empty");
           dots.appendChild(d);
         }
+
         if (remaining > 0) {
           const bonus = getBonusUsed();
-          const baseRemaining = Math.max(0, 3 - getQuotaUsed());
+          const baseRemaining = Math.max(0, 3 - used);
           if (bonus > 0 && baseRemaining <= 0) {
-            // 보너스 뽑기 중
-            text.textContent = T.quotaMsg[bonus === 1 ? 3 : 4];
+            text.textContent = t.quotaMsg[bonus === 1 ? 3 : 4];
           } else {
-            text.textContent = T.quotaMsg[3 - remaining] || T.quotaMsg[0];
+            text.textContent = t.quotaMsg[3 - remaining] || t.quotaMsg[0];
           }
         } else {
-          text.textContent = "오늘의 카드를 모두 뽑았어요";
+          text.textContent = t.quotaAllUsed;
         }
-        // 폼 / 버튼 제어
+
         const drawBtn = document.getElementById("drawBtn");
         const quotaDone = document.getElementById("quotaDone");
         if (remaining === 0) {
-          drawBtn.classList.add("hidden");
-          quotaDone.classList.remove("hidden");
+          if (drawBtn) drawBtn.classList.add("hidden");
+          if (quotaDone) {
+            quotaDone.classList.remove("hidden");
+            quotaDone.innerHTML = `${t.tomorrowBtn}<br><span style="font-size:0.85rem;opacity:0.7">${t.quotaDoneMsg}</span>`;
+          }
         } else {
-          drawBtn.classList.remove("hidden");
-          quotaDone.classList.add("hidden");
+          if (drawBtn) drawBtn.classList.remove("hidden");
+          if (quotaDone) quotaDone.classList.add("hidden");
         }
+
         // 다시 뽑기 버튼
         const againBtn = document.getElementById("againBtn");
         if (againBtn) {
           if (remaining === 0) {
-            againBtn.textContent = "내일 다시 와주세요 🌙";
+            againBtn.textContent = t.tomorrowBtn;
             againBtn.disabled = true;
             againBtn.style.opacity = ".4";
             againBtn.style.cursor = "not-allowed";
           } else {
-            againBtn.textContent = "↺ 다시 뽑기";
+            againBtn.textContent = t.drawAgain;
             againBtn.disabled = false;
             againBtn.style.opacity = "1";
             againBtn.style.cursor = "pointer";
@@ -259,15 +291,10 @@ https://yesorno-tarot.vercel.app/
       function toggleDark() {
         dark = dark ? 0 : 1;
         document.getElementById("app").dataset.dark = dark;
-        document.getElementById("toggleLabel").textContent = dark
-          ? "☀️ 라이트"
-          : "🌙 다크";
+        document.getElementById("toggleLabel").textContent = getT().darkToggle[dark ? 1 : 0];
         updateDivider();
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "toggle_dark_mode",
-          mode: dark ? "dark" : "light",
-        });
+        dataLayer.push({ event: "toggle_dark_mode", mode: dark ? "dark" : "light" });
       }
       function updateDivider() {
         const p = document.getElementById("divPath");
@@ -278,25 +305,16 @@ https://yesorno-tarot.vercel.app/
       // 쿠키 동의
       // ════════════════════════════════
       function handleConsent(accepted) {
-        localStorage.setItem(
-          "cookie_consent",
-          accepted ? "accepted" : "declined",
-        );
+        localStorage.setItem("cookie_consent", accepted ? "accepted" : "declined");
         document.getElementById("consentBanner").classList.add("hidden");
-
-        // Consent Mode v2 업데이트
         gtag("consent", "update", {
           analytics_storage: "granted",
           ad_storage: accepted ? "granted" : "denied",
           ad_user_data: accepted ? "granted" : "denied",
           ad_personalization: accepted ? "granted" : "denied",
         });
-
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "cookie_consent",
-          accepted: accepted ? "accepted" : "declined",
-        });
+        dataLayer.push({ event: "cookie_consent", accepted: accepted ? "accepted" : "declined" });
       }
 
       (function initConsent() {

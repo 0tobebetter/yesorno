@@ -23,15 +23,78 @@
         localStorage.setItem(getDrawTimesKey(), JSON.stringify(times));
       }
 
+      // ════════════════════════════════
+      // 카카오 공유
+      // ════════════════════════════════
+      function shareToKakao() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ event: "share_result", method: "kakao" });
+
+        const c = currentCard;
+        if (!c) return;
+
+        if (typeof Kakao === "undefined") {
+          showToast(getT().toastKakaoLoading);
+          const tryInit = setInterval(() => {
+            if (typeof Kakao !== "undefined") {
+              clearInterval(tryInit);
+              Kakao.init("d661394f4398fbc9ec3574508826a844");
+              doKakaoShare(c);
+            }
+          }, 300);
+          setTimeout(() => clearInterval(tryInit), 5000);
+          return;
+        }
+
+        if (!Kakao.isInitialized()) {
+          Kakao.init("d661394f4398fbc9ec3574508826a844");
+        }
+        doKakaoShare(c);
+        grantShareBonus();
+      }
+
+      function doKakaoShare(c) {
+        const isEn = getLang() === "en";
+        const verdict = c.isYes ? "YES" : "NO";
+        const title = isEn
+          ? `YES or NO Tarot — ${verdict} (${c.confidence})`
+          : `YES or NO 타로 — ${verdict} (${c.confidence})`;
+        const desc = c.desc.length > 80 ? c.desc.slice(0, 80) + "…" : c.desc;
+
+        Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title,
+            description: desc,
+            imageUrl: "https://yesorno-tarot.vercel.app/og-image.png",
+            link: {
+              mobileWebUrl: "https://yesorno-tarot.vercel.app/",
+              webUrl: "https://yesorno-tarot.vercel.app/",
+            },
+          },
+          buttons: [
+            {
+              title: isEn ? "Try it yourself" : "나도 뽑아보기",
+              link: {
+                mobileWebUrl: "https://yesorno-tarot.vercel.app/",
+                webUrl: "https://yesorno-tarot.vercel.app/",
+              },
+            },
+          ],
+        });
+      }
+
       function drawCard() {
         if (drawn || getQuotaUsed() >= getMaxQuota()) return;
         drawn = true;
+        recordDrawTime();
         document.getElementById("drawBtn").disabled = true;
 
-        recordDrawTime();
         const key = CARD_KEYS[Math.floor(Math.random() * CARD_KEYS.length)];
         const data = DESCS[key];
-        const dataEn = (typeof DESCS_EN !== "undefined" && DESCS_EN[key]) ? DESCS_EN[key] : { confidence: data.confidence, descs: data.descs };
+        const dataEn = (typeof DESCS_EN !== "undefined" && DESCS_EN[key])
+          ? DESCS_EN[key]
+          : { confidence: data.confidence, descs: data.descs };
         const catVal = document.getElementById("catSelect").value;
         const catIdx =
           catVal && CAT_MAP[catVal] !== undefined ? CAT_MAP[catVal] : 6;
@@ -80,13 +143,11 @@
           200,
         );
         setTimeout(() => {
+          const isEnNow = getLang() === "en";
           document.getElementById("resultArea").classList.remove("hidden");
-          document.getElementById("resultVerdict").textContent = data.yes
-            ? "YES."
-            : "NO.";
-          document.getElementById("resultBadge").textContent = data.confidence;
-          document.getElementById("resultDesc").textContent =
-            data.descs[catIdx];
+          document.getElementById("resultVerdict").textContent = data.yes ? "YES." : "NO.";
+          document.getElementById("resultBadge").textContent = currentCard.confidence;
+          document.getElementById("resultDesc").textContent = currentCard.desc;
           updateDivider();
           document.getElementById("drawBtn").style.display = "none";
           document
@@ -150,9 +211,9 @@
         btn.disabled = false;
         btn.style.display = "";
         document.getElementById("formArea").style.display = "";
-        document.getElementById("qInput").value = "";
+        const qInputEl = document.getElementById("qInput");
+        if (qInputEl) { qInputEl.value = ""; updateCount(); }
         document.getElementById("catSelect").value = "";
-        updateCount();
         currentCard = null;
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
@@ -323,7 +384,7 @@
           // 타이틀
           ctx.font = "bold 13px sans-serif";
           ctx.fillStyle = "#999";
-          ctx.fillText("YES or NO 타로", PAD, y + 13);
+          ctx.fillText(getLang() === "en" ? "YES or NO Tarot" : "YES or NO 타로", PAD, y + 13);
           y += 20 + 16;
 
           // 카드 이미지 (로드 성공한 경우만)
@@ -394,7 +455,7 @@
           y += 12;
           ctx.font = "11px sans-serif";
           ctx.fillStyle = "#bbb";
-          ctx.fillText("해결! 양자택일 타로", PAD, y + 10);
+          ctx.fillText(getT().scFooter, PAD, y + 10);
 
           // 저장 / 공유
           // 저장 / 공유 — 모바일만 Web Share API 사용
@@ -410,7 +471,7 @@
                 try {
                   await navigator.share({
                     files: [file],
-                    title: "YES or NO 타로 결과",
+                    title: getLang() === "en" ? "YES or NO Tarot Result" : "YES or NO 타로 결과",
                   });
                 } catch (err) {
                   if (err.name !== "AbortError") fallbackDownload(canvas, c);
@@ -439,74 +500,11 @@
       }
 
       // ════════════════════════════════
-      // 카카오 공유
-      // ════════════════════════════════
-      function shareToKakao() {
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ event: "share_result", method: "kakao" });
-
-        const c = currentCard;
-        if (!c) return;
-
-        if (typeof Kakao === "undefined" || !Kakao.isInitialized) {
-          showToast(I18N[getLang()].toastKakaoLoading);
-          // SDK 로드 대기 후 재시도
-          const tryInit = setInterval(() => {
-            if (typeof Kakao !== "undefined") {
-              clearInterval(tryInit);
-              Kakao.init("d661394f4398fbc9ec3574508826a844");
-              doKakaoShare(c);
-            }
-          }, 300);
-          setTimeout(() => clearInterval(tryInit), 5000);
-          return;
-        }
-
-        if (!Kakao.isInitialized()) {
-          Kakao.init("d661394f4398fbc9ec3574508826a844");
-        }
-        doKakaoShare(c);
-        grantShareBonus();
-      }
-
-      function doKakaoShare(c) {
-        const isEn = getLang() === "en";
-        const desc = c.desc || "";
-        const verdict = c.isYes ? "YES" : "NO";
-        const title = isEn
-          ? `YES or NO Tarot — ${verdict} (${c.confidence})`
-          : `YES or NO 타로 — ${verdict} (${c.confidence})`;
-
-        Kakao.Share.sendDefault({
-          objectType: "feed",
-          content: {
-            title: title,
-            description: desc.length > 80 ? desc.slice(0, 80) + "…" : desc,
-            imageUrl: "https://yesorno-tarot.vercel.app/og-image.png",
-            link: {
-              mobileWebUrl: "https://yesorno-tarot.vercel.app/",
-              webUrl: "https://yesorno-tarot.vercel.app/",
-            },
-          },
-          buttons: [
-            {
-              title: isEn ? "Try it yourself" : "나도 뽑아보기",
-              link: {
-                mobileWebUrl: "https://yesorno-tarot.vercel.app/",
-                webUrl: "https://yesorno-tarot.vercel.app/",
-              },
-            },
-          ],
-        });
-      }
-
-      // ════════════════════════════════
       // 언어 전환
       // ════════════════════════════════
       function toggleLang() {
         const newLang = getLang() === "ko" ? "en" : "ko";
-        setLang(newLang);
-        renderQuota();
+        setLang(newLang); // applyLang() + renderQuota() 포함
         if (currentCard) {
           const isEn = newLang === "en";
           currentCard.confidence = isEn ? currentCard.confidenceEn : currentCard.confidenceKo;
@@ -516,6 +514,8 @@
           document.getElementById("sc-badge").textContent = currentCard.confidence;
           document.getElementById("sc-desc").textContent = currentCard.desc;
         }
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ event: "toggle_lang", lang: newLang });
       }
 
       function showToast(msg) {
@@ -536,7 +536,7 @@
       ) {
         dark = 1;
         document.getElementById("app").dataset.dark = 1;
-        document.getElementById("toggleLabel").textContent = "☀️ 라이트";
+        // toggleLabel은 applyLang()에서 처리하므로 여기서 설정 불필요
       }
 
       // 시스템 설정 변경 시 실시간 반영
@@ -545,12 +545,10 @@
         .addEventListener("change", (e) => {
           dark = e.matches ? 1 : 0;
           document.getElementById("app").dataset.dark = dark;
-          document.getElementById("toggleLabel").textContent = dark
-            ? "☀️ 라이트"
-            : "🌙 다크";
+          document.getElementById("toggleLabel").textContent = getT().darkToggle[dark ? 1 : 0];
           updateDivider();
         });
 
       updateDivider();
       renderQuota();
-      applyLang();
+      applyLang(); // 언어 + 다크 레이블 모두 여기서 일괄 처리
