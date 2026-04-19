@@ -37,7 +37,6 @@
           quotaDone: "내일 다시 와주세요 🌙",
           quotaAllUsed: "오늘의 카드를 모두 뽑았어요",
           title: "YES or NO",
-          subtitle: "해결! 양자택일타로",
           categoryLabel: "고민 종류 (선택 사항)",
           categories: {
             "": "선택 안 함",
@@ -77,6 +76,8 @@ https://yesorno-tarot.vercel.app/
           darkToggle: ["🌙 다크", "☀️ 라이트"],
           scFooter: "해결! 양자택일 타로",
           langLabel: "한",
+          subtitle: "해결! <span class=\"hl\">양자택일</span>타로",
+          footerCopy: "© 2026 YES or NO 타로",
         },
         en: {
           quotaMsg: [
@@ -89,7 +90,6 @@ https://yesorno-tarot.vercel.app/
           quotaDone: "Come back tomorrow 🌙",
           quotaAllUsed: "You've used all your draws for today",
           title: "YES or NO",
-          subtitle: "Let the tarot decide",
           categoryLabel: "Topic (optional)",
           categories: {
             "": "No preference",
@@ -129,6 +129,8 @@ https://yesorno-tarot.vercel.app/
           darkToggle: ["🌙 Dark", "☀️ Light"],
           scFooter: "YES or NO Tarot",
           langLabel: "EN",
+          subtitle: "Let the tarot <span class=\"hl\">decide</span>",
+          footerCopy: "© 2026 YES or NO Tarot",
         },
       };
 
@@ -167,11 +169,16 @@ https://yesorno-tarot.vercel.app/
           "shareNudgeBonus": t.shareNudgeBonus,
           "privacyLink":     t.privacyLink,
           "fieldLabelCat":   t.categoryLabel,
+          "footerCopy":      t.footerCopy,
         };
         Object.entries(els).forEach(([id, text]) => {
           const el = document.getElementById(id);
           if (el) el.textContent = text;
         });
+
+        // subtitle은 innerHTML (span.hl 포함)
+        const subtitleEl = document.getElementById("subtitle");
+        if (subtitleEl) subtitleEl.innerHTML = t.subtitle;
 
         // 다크모드 토글 레이블 (언어 전환 시에도 현재 모드 기준)
         const toggleLabel = document.getElementById("toggleLabel");
