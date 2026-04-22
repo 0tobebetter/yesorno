@@ -48,7 +48,8 @@
             "건강": "🌿 건강",
             "그 외": "✨ 그 외",
           },
-          drawBtn: "카드 뽑기 →",
+          drawBtn: "마음속 질문을 떠올리고 → 카드 뽑기",
+          subDesc: "Yes or No로 답할 수 있는 질문을 생각하고 카드를 뽑아보세요. 하루 3번 무료.",
           shareNudgeMain: "친구한테도 공유해보세요!",
           shareNudgeBonus: "공유하면 오늘 한 번 더 뽑을 수 있어요 🎁",
           shareX: "X 공유",
@@ -101,7 +102,8 @@ https://yesorno-tarot.vercel.app/
             "건강": "🌿 Health",
             "그 외": "✨ Other",
           },
-          drawBtn: "Draw a card →",
+          drawBtn: "Think of your question → Draw a card",
+          subDesc: "Think of a yes-or-no question and draw your card. 3 free draws per day.",
           shareNudgeMain: "Share with a friend!",
           shareNudgeBonus: "Share and get one more draw today 🎁",
           shareX: "Share on X",
@@ -165,6 +167,7 @@ https://yesorno-tarot.vercel.app/
         // 정적 텍스트 ID 매핑
         const els = {
           "drawBtnText":     t.drawBtn,
+          "subDesc":         t.subDesc,
           "shareNudgeMain":  t.shareNudgeMain,
           "shareNudgeBonus": t.shareNudgeBonus,
           "privacyLink":     t.privacyLink,

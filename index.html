@@ -215,6 +215,7 @@
       <div class="subtitle" id="subtitle">
         해결! <span class="hl">양자택일</span>타로
       </div>
+      <p class="sub-desc" id="subDesc">Yes or No로 답할 수 있는 질문을 생각하고 카드를 뽑아보세요. 하루 3번 무료.</p>
 
       <!-- 남은 횟수 -->
       <div class="quota-badge" id="quotaBadge">
@@ -230,39 +231,28 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
         </div>
 
-        <div class="field-label" id="fieldLabelCat">고민 종류 (선택 사항)</div>
-        <select class="category-select" id="catSelect">
-          <option value="">선택 안 함</option>
-          <option value="연애">💕 연애</option>
-          <option value="인간관계">🤝 인간관계</option>
-          <option value="직장·커리어">💼 직장 · 커리어</option>
-          <option value="공부·시험">📚 공부 · 시험</option>
-          <option value="돈·재테크">💰 돈 · 재테크</option>
-          <option value="건강">🌿 건강</option>
-          <option value="그 외">✨ 그 외</option>
-        </select>
-        <!-- 
-        <div class="field-label">질문 (선택 사항)</div>
-        <div class="q-wrap">
-          <textarea
-            class="question-input"
-            id="qInput"
-            rows="2"
-            placeholder="ex. 오늘 점심 김치찌개 먹을까요?"
-            maxlength="100"
-            oninput="updateCount()"
-          ></textarea>
-          <span class="char-count" id="charCount">0 / 100</span>
-        </div> -->
-
         <button class="draw-btn" id="drawBtn" onclick="drawCard()">
-          <span id="drawBtnText">카드 뽑기 →</span>
+          <span id="drawBtnText">마음속 질문을 떠올리고 → 카드 뽑기</span>
         </button>
         <div class="quota-done hidden" id="quotaDone">
           내일 다시 와주세요 🌙<br /><span
             style="font-size: 0.85rem; opacity: 0.7"
             >오늘의 세 장은 모두 뽑았어요</span
           >
+        </div>
+
+        <div class="category-wrap">
+          <div class="field-label" id="fieldLabelCat">고민 종류 (선택 사항)</div>
+          <select class="category-select" id="catSelect">
+            <option value="">선택 안 함</option>
+            <option value="연애">💕 연애</option>
+            <option value="인간관계">🤝 인간관계</option>
+            <option value="직장·커리어">💼 직장 · 커리어</option>
+            <option value="공부·시험">📚 공부 · 시험</option>
+            <option value="돈·재테크">💰 돈 · 재테크</option>
+            <option value="건강">🌿 건강</option>
+            <option value="그 외">✨ 그 외</option>
+          </select>
         </div>
       </div>
 

@@ -231,6 +231,20 @@
         background: transparent;
       }
 
+      /* ── 서브디스크립션 ── */
+      .sub-desc {
+        font-size: 0.88rem;
+        color: var(--fg3);
+        margin: 0.4rem 0 0.8rem;
+        line-height: 1.55;
+        text-align: center;
+      }
+
+      /* ── 카테고리 래퍼 ── */
+      .category-wrap {
+        margin-top: 1rem;
+      }
+
       /* ── 폼 ── */
       .field-label {
         font-family: "IsYun", cursive;
@@ -380,6 +394,14 @@
       }
       .card-back-inner {
         text-align: center;
+        animation: cardFloat 3s ease-in-out infinite;
+      }
+      @keyframes cardFloat {
+        0%, 100% { transform: translateY(0px); }
+        50%       { transform: translateY(-8px); }
+      }
+      .card-inner.flipped .card-back-inner {
+        animation: none;
       }
       .card-back-q {
         font-family: "Caveat", cursive;
