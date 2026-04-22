@@ -811,6 +811,336 @@ ${situations}
 }
 
 // ──────────────────────────────────────────────
+// 인덱스 페이지용 전체 카드 메타 (순서 포함)
+// ──────────────────────────────────────────────
+const ALL_CARDS = [
+  { numeral:"0",    koName:"바보",            enName:"The Fool",          file:"the-fool-yes-no",             verdictKo:"가벼운 YES",      verdictEn:"A gentle YES",         isYes:true  },
+  { numeral:"I",    koName:"마법사",          enName:"The Magician",      file:"the-magician-yes-no",         verdictKo:"강한 YES",        verdictEn:"A strong YES",         isYes:true  },
+  { numeral:"II",   koName:"여사제",          enName:"The High Priestess",file:"the-high-priestess-yes-no",   verdictKo:"조용한 NO",       verdictEn:"A quiet NO",           isYes:false },
+  { numeral:"III",  koName:"여황제",          enName:"The Empress",       file:"the-empress-yes-no",          verdictKo:"풍요로운 YES",    verdictEn:"An abundant YES",      isYes:true  },
+  { numeral:"IV",   koName:"황제",            enName:"The Emperor",       file:"the-emperor-yes-no",          verdictKo:"단단한 YES",      verdictEn:"A solid YES",          isYes:true  },
+  { numeral:"V",    koName:"교황",            enName:"The Hierophant",    file:"the-hierophant-yes-no",       verdictKo:"안정적인 YES",    verdictEn:"A steady YES",         isYes:true  },
+  { numeral:"VI",   koName:"연인",            enName:"The Lovers",        file:"the-lovers-yes-no",           verdictKo:"설레는 YES",      verdictEn:"An exciting YES",      isYes:true  },
+  { numeral:"VII",  koName:"전차",            enName:"The Chariot",       file:"the-chariot-yes-no",          verdictKo:"돌파하는 YES",    verdictEn:"A breakthrough YES",   isYes:true  },
+  { numeral:"VIII", koName:"힘",              enName:"Strength",          file:"the-strength-yes-no",         verdictKo:"차분한 YES",      verdictEn:"A calm YES",           isYes:true  },
+  { numeral:"IX",   koName:"은둔자",          enName:"The Hermit",        file:"the-hermit-yes-no",           verdictKo:"아직은 NO",       verdictEn:"Not yet — NO",         isYes:false },
+  { numeral:"X",    koName:"운명의 수레바퀴", enName:"Wheel of Fortune",  file:"the-wheel-of-fortune-yes-no", verdictKo:"운이 도는 YES",   verdictEn:"The tide is turning",  isYes:true  },
+  { numeral:"XI",   koName:"정의",            enName:"Justice",           file:"the-justice-yes-no",          verdictKo:"이성적인 YES",    verdictEn:"A rational YES",       isYes:true  },
+  { numeral:"XII",  koName:"매달린 사람",     enName:"The Hanged Man",    file:"the-hanged-man-yes-no",       verdictKo:"지금은 NO",       verdictEn:"Not yet — NO",         isYes:false },
+  { numeral:"XIII", koName:"죽음",            enName:"Death",             file:"the-death-yes-no",            verdictKo:"끝내는 NO",       verdictEn:"Time to end it",       isYes:false },
+  { numeral:"XIV",  koName:"절제",            enName:"Temperance",        file:"the-temperance-yes-no",       verdictKo:"무난한 YES",      verdictEn:"A measured YES",       isYes:true  },
+  { numeral:"XV",   koName:"악마",            enName:"The Devil",         file:"the-devil-yes-no",            verdictKo:"유혹의 NO",       verdictEn:"A tempting NO",        isYes:false },
+  { numeral:"XVI",  koName:"탑",              enName:"The Tower",         file:"the-tower-yes-no",            verdictKo:"강력한 NO",       verdictEn:"A sharp NO",           isYes:false },
+  { numeral:"XVII", koName:"별",              enName:"The Star",          file:"the-star-yes-no",             verdictKo:"YES",             verdictEn:"YES",                  isYes:true  },
+  { numeral:"XVIII",koName:"달",              enName:"The Moon",          file:"the-moon-yes-no",             verdictKo:"아직은 NO",       verdictEn:"Not quite — NO",       isYes:false },
+  { numeral:"XIX",  koName:"태양",            enName:"The Sun",           file:"the-sun-yes-no",              verdictKo:"강력한 YES",      verdictEn:"A powerful YES",       isYes:true  },
+  { numeral:"XX",   koName:"심판",            enName:"Judgement",         file:"the-judgement-yes-no",        verdictKo:"깨닫는 YES",      verdictEn:"An awakening YES",     isYes:true  },
+  { numeral:"XXI",  koName:"세계",            enName:"The World",         file:"the-world-yes-no",            verdictKo:"완전한 YES",      verdictEn:"A complete YES",       isYes:true  },
+];
+
+const INDEX_STYLE = `
+      .blog-wrap { max-width: 720px; margin: 0 auto; padding: 2rem 1.4rem 6rem; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.6rem; gap: 0.75rem; }
+      .site-logo { font-family: "Caveat", cursive; font-size: 1.4rem; font-weight: 700; color: var(--fg); text-decoration: none; }
+      .site-logo:hover { opacity: 0.75; }
+      .topbar-right { display: flex; gap: 0.5rem; align-items: center; }
+      .lang-switch { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--bg2); color: var(--fg2); text-decoration: none; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
+      .lang-switch:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); color: var(--fg); }
+      .dark-toggle { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--btn-bg); color: var(--btn-fg); cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
+      .dark-toggle:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+      .dark-toggle:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--border); }
+      .breadcrumb { font-size: 0.82rem; color: var(--fg3); margin-bottom: 1rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+      .breadcrumb a { color: var(--fg2); text-decoration: none; border-bottom: 1px solid var(--border); }
+      .breadcrumb a:hover { color: var(--fg); }
+      .breadcrumb-sep { opacity: 0.4; }
+      .page-title { font-family: "Caveat", cursive; font-size: 2rem; font-weight: 700; margin: 1.2rem 0 0.4rem; }
+      .page-sub { font-size: 0.95rem; color: var(--fg2); margin-bottom: 2rem; line-height: 1.7; }
+      .filter-row { display: flex; gap: 0.5rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+      .filter-btn { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.9rem; border: 1.5px solid var(--border); background: var(--bg2); color: var(--fg2); cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
+      .filter-btn.active, .filter-btn:hover { background: var(--btn-bg); color: var(--btn-fg); transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+      .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+      .card-item { display: flex; flex-direction: column; border: 1.5px solid var(--border); background: var(--card-bg); text-decoration: none; color: var(--fg); transition: transform 0.12s, box-shadow 0.12s; box-shadow: var(--shadow-sm); }
+      .card-item:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--border); }
+      .card-thumb { width: 100%; aspect-ratio: 5/8; overflow: hidden; border-bottom: 1.5px solid var(--border); background: var(--bg2); }
+      .card-thumb svg { width: 100%; height: 100%; display: block; }
+      .card-info { padding: 0.65rem 0.75rem 0.75rem; display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
+      .card-num { font-size: 0.72rem; color: var(--fg3); letter-spacing: 1px; }
+      .card-name { font-family: "Caveat", cursive; font-size: 1.15rem; font-weight: 700; line-height: 1.2; }
+      .card-verdict { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 0.1rem 0.5rem; border: 1.5px solid var(--border); background: var(--bg2); margin-top: 0.2rem; align-self: flex-start; }
+      .card-verdict.yes { border-color: #1a1a1a; }
+      .card-verdict.no  { opacity: 0.65; }
+      .cta-box { margin-top: 2.8rem; padding: 1.4rem 1.2rem; border: 1.5px solid var(--border); background: var(--bg2); text-align: center; box-shadow: var(--shadow); }
+      .cta-heading { font-family: "Caveat", cursive; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+      .cta-sub { font-size: 0.9rem; color: var(--fg2); margin-bottom: 1rem; line-height: 1.6; }
+      .cta-btn { display: inline-block; font-family: "IsYun", sans-serif; font-size: 1rem; font-weight: 700; padding: 0.65rem 1.8rem; border: 1.5px solid var(--border); background: var(--btn-bg); color: var(--btn-fg); text-decoration: none; box-shadow: var(--shadow); transition: transform 0.1s, box-shadow 0.1s; }
+      .cta-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--border); }
+      .cta-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--border); }
+      .blog-footer { margin-top: 4rem; padding-top: 1.2rem; border-top: 1.5px solid var(--border); font-size: 0.82rem; color: var(--fg3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+      .blog-footer a { color: var(--fg2); text-decoration: none; border-bottom: 1px solid var(--fg3); }
+      .blog-footer a:hover { color: var(--fg); }
+      @media (max-width: 540px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 340px) { .card-grid { grid-template-columns: 1fr; } }
+`;
+
+function genIndexKo() {
+  const items = ALL_CARDS.map((c) => {
+    const svgKey = Object.keys(SVG_DEFS).find(
+      (k) => k.toLowerCase().replace(/\s/g, "") === c.enName.toLowerCase().replace(/the |of |\s/g, "")
+    ) || c.file.replace(/-yes-no$/, "").replace(/-/g, "").replace(/the/g, "");
+    // map file slug back to SVG key
+    const slugToKey = {
+      "the-fool-yes-no": "fool", "the-magician-yes-no": "magician",
+      "the-high-priestess-yes-no": "highPriestess", "the-empress-yes-no": "empress",
+      "the-emperor-yes-no": "emperor", "the-hierophant-yes-no": "hierophant",
+      "the-lovers-yes-no": "lovers", "the-chariot-yes-no": "chariot",
+      "the-strength-yes-no": "strength", "the-hermit-yes-no": "hermit",
+      "the-wheel-of-fortune-yes-no": "wheeloffortune", "the-justice-yes-no": "justice",
+      "the-hanged-man-yes-no": "hangedMan", "the-death-yes-no": "death",
+      "the-temperance-yes-no": "temperance", "the-devil-yes-no": "devil",
+      "the-tower-yes-no": "tower", "the-star-yes-no": "star",
+      "the-moon-yes-no": "moon", "the-sun-yes-no": "sun",
+      "the-judgement-yes-no": "judgement", "the-world-yes-no": "world",
+    };
+    const key = slugToKey[c.file];
+    return `      <a href="./${c.file}.html" class="card-item" data-yn="${c.isYes ? "yes" : "no"}">
+        <div class="card-thumb">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">${SVG_DEFS[key]}</svg>
+        </div>
+        <div class="card-info">
+          <span class="card-num">${c.numeral}</span>
+          <span class="card-name">${c.koName}</span>
+          <span class="card-verdict ${c.isYes ? "yes" : "no"}">${c.verdictKo}</span>
+        </div>
+      </a>`;
+  }).join("\n");
+
+  return `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>타로카드 YES or NO 해석 모음 | 양자택일 타로 블로그</title>
+    <meta name="description" content="메이저 아르카나 22장 전체의 YES or NO 타로 해석을 한곳에서 확인하세요. 정방향·역방향 의미와 연애·직장·돈·건강 상황별 조언 수록." />
+    <meta name="keywords" content="타로카드 yes no, 양자택일 타로 해석, 메이저 아르카나 해석, 타로 정방향 역방향" />
+    <link rel="canonical" href="https://yesorno-tarot.vercel.app/blog/index.html" />
+    <link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/index.html" />
+    <link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/index.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="타로카드 YES or NO 해석 모음 | 양자택일 타로 블로그" />
+    <meta property="og:description" content="메이저 아르카나 22장 전체의 YES or NO 타로 해석을 한곳에서 확인하세요." />
+    <meta property="og:url" content="https://yesorno-tarot.vercel.app/blog/index.html" />
+    <meta property="og:image" content="https://yesorno-tarot.vercel.app/og-image.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="타로카드 YES or NO 해석 모음 | 양자택일 타로 블로그" />
+    <meta name="twitter:image" content="https://yesorno-tarot.vercel.app/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "양자택일 타로 블로그",
+        "description": "메이저 아르카나 22장 YES or NO 타로 해석 모음",
+        "url": "https://yesorno-tarot.vercel.app/blog/index.html",
+        "inLanguage": "ko"
+      }
+    <\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../style.css" />
+    <style>${INDEX_STYLE}</style>
+  </head>
+  <body id="app">
+    <div class="blog-wrap">
+      <div class="topbar">
+        <a href="../index.html" class="site-logo">YES or NO ✦</a>
+        <div class="topbar-right">
+          <a href="./en/index.html" class="lang-switch">EN</a>
+          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 다크</button>
+        </div>
+      </div>
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="../index.html">홈</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>블로그</span>
+      </nav>
+      <h1 class="page-title">타로카드 YES or NO 해석</h1>
+      <p class="page-sub">메이저 아르카나 22장 전체 — 정방향·역방향 의미와 연애·직장·돈·건강 상황별 조언을 카드별로 확인하세요.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filter('all', this)">전체 (22)</button>
+        <button class="filter-btn" onclick="filter('yes', this)">YES 카드</button>
+        <button class="filter-btn" onclick="filter('no', this)">NO 카드</button>
+      </div>
+      <div class="card-grid" id="grid">
+${items}
+      </div>
+      <div class="cta-box">
+        <div class="cta-heading">지금 바로 카드를 뽑아보세요</div>
+        <p class="cta-sub">오늘 내 질문에 어떤 카드가 답할까요?<br/>하루 세 번 무료로 양자택일 타로를 뽑을 수 있습니다.</p>
+        <a href="../index.html" class="cta-btn">직접 뽑아보기 →</a>
+      </div>
+      <footer class="blog-footer">
+        <span>© 2025 양자택일 타로</span>
+        <span>
+          <a href="../index.html">앱으로 이동</a>
+          &nbsp;·&nbsp;
+          <a href="../privacy.html">개인정보처리방침</a>
+        </span>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        if (localStorage.getItem("dark") === "1") {
+          document.getElementById("app").setAttribute("data-dark", "1");
+          document.getElementById("darkBtn").textContent = "☀️ 라이트";
+        }
+      })();
+      function toggleDark() {
+        const app = document.getElementById("app");
+        const btn = document.getElementById("darkBtn");
+        const isDark = app.getAttribute("data-dark") === "1";
+        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 다크"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ 라이트"; localStorage.setItem("dark", "1"); }
+      }
+      function filter(type, btn) {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".card-item").forEach(el => {
+          el.style.display = (type === "all" || el.dataset.yn === type) ? "" : "none";
+        });
+      }
+    <\/script>
+  </body>
+</html>`;
+}
+
+function genIndexEn() {
+  const items = ALL_CARDS.map((c) => {
+    const slugToKey = {
+      "the-fool-yes-no": "fool", "the-magician-yes-no": "magician",
+      "the-high-priestess-yes-no": "highPriestess", "the-empress-yes-no": "empress",
+      "the-emperor-yes-no": "emperor", "the-hierophant-yes-no": "hierophant",
+      "the-lovers-yes-no": "lovers", "the-chariot-yes-no": "chariot",
+      "the-strength-yes-no": "strength", "the-hermit-yes-no": "hermit",
+      "the-wheel-of-fortune-yes-no": "wheeloffortune", "the-justice-yes-no": "justice",
+      "the-hanged-man-yes-no": "hangedMan", "the-death-yes-no": "death",
+      "the-temperance-yes-no": "temperance", "the-devil-yes-no": "devil",
+      "the-tower-yes-no": "tower", "the-star-yes-no": "star",
+      "the-moon-yes-no": "moon", "the-sun-yes-no": "sun",
+      "the-judgement-yes-no": "judgement", "the-world-yes-no": "world",
+    };
+    const key = slugToKey[c.file];
+    return `      <a href="./${c.file}.html" class="card-item" data-yn="${c.isYes ? "yes" : "no"}">
+        <div class="card-thumb">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">${SVG_DEFS[key]}</svg>
+        </div>
+        <div class="card-info">
+          <span class="card-num">${c.numeral}</span>
+          <span class="card-name">${c.enName}</span>
+          <span class="card-verdict ${c.isYes ? "yes" : "no"}">${c.verdictEn}</span>
+        </div>
+      </a>`;
+  }).join("\n");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarot Card YES or NO Readings — Yes or No Tarot Blog</title>
+    <meta name="description" content="YES or NO readings for all 22 Major Arcana tarot cards in one place. Upright and reversed meanings plus situation-specific advice for love, work, money, and health." />
+    <meta name="keywords" content="tarot yes or no, major arcana yes no, tarot card meanings, yes no tarot readings" />
+    <link rel="canonical" href="https://yesorno-tarot.vercel.app/blog/en/index.html" />
+    <link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/index.html" />
+    <link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/index.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tarot Card YES or NO Readings — Yes or No Tarot Blog" />
+    <meta property="og:description" content="YES or NO readings for all 22 Major Arcana tarot cards in one place." />
+    <meta property="og:url" content="https://yesorno-tarot.vercel.app/blog/en/index.html" />
+    <meta property="og:image" content="https://yesorno-tarot.vercel.app/og-image.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tarot Card YES or NO Readings — Yes or No Tarot Blog" />
+    <meta name="twitter:image" content="https://yesorno-tarot.vercel.app/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Yes or No Tarot Blog",
+        "description": "YES or NO readings for all 22 Major Arcana tarot cards",
+        "url": "https://yesorno-tarot.vercel.app/blog/en/index.html",
+        "inLanguage": "en"
+      }
+    <\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <style>${INDEX_STYLE}</style>
+  </head>
+  <body id="app">
+    <div class="blog-wrap">
+      <div class="topbar">
+        <a href="../../index.html" class="site-logo">YES or NO ✦</a>
+        <div class="topbar-right">
+          <a href="../index.html" class="lang-switch">한국어</a>
+          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+        </div>
+      </div>
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Blog</span>
+      </nav>
+      <h1 class="page-title">Tarot Card YES or NO Readings</h1>
+      <p class="page-sub">All 22 Major Arcana cards — upright and reversed meanings plus advice for love, work, money, and health, one card at a time.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filter('all', this)">All (22)</button>
+        <button class="filter-btn" onclick="filter('yes', this)">YES cards</button>
+        <button class="filter-btn" onclick="filter('no', this)">NO cards</button>
+      </div>
+      <div class="card-grid" id="grid">
+${items}
+      </div>
+      <div class="cta-box">
+        <div class="cta-heading">Draw your own card now</div>
+        <p class="cta-sub">What card will answer your question today?<br/>Draw up to three free YES or NO tarot readings per day.</p>
+        <a href="../../index.html" class="cta-btn">Try it yourself →</a>
+      </div>
+      <footer class="blog-footer">
+        <span>© 2025 Yes or No Tarot</span>
+        <span>
+          <a href="../../index.html">Go to app</a>
+          &nbsp;·&nbsp;
+          <a href="../../privacy.html">Privacy</a>
+        </span>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        if (localStorage.getItem("dark") === "1") {
+          document.getElementById("app").setAttribute("data-dark", "1");
+          document.getElementById("darkBtn").textContent = "☀️ Light";
+        }
+      })();
+      function toggleDark() {
+        const app = document.getElementById("app");
+        const btn = document.getElementById("darkBtn");
+        const isDark = app.getAttribute("data-dark") === "1";
+        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 Dark"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ Light"; localStorage.setItem("dark", "1"); }
+      }
+      function filter(type, btn) {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".card-item").forEach(el => {
+          el.style.display = (type === "all" || el.dataset.yn === type) ? "" : "none";
+        });
+      }
+    <\/script>
+  </body>
+</html>`;
+}
+
+// ──────────────────────────────────────────────
 // 파일 생성
 // ──────────────────────────────────────────────
 const blogDir = __dirname;
@@ -826,4 +1156,11 @@ for (const card of CARDS) {
   count += 2;
   console.log(`✓ ${card.koName} (${card.enName}) — KO + EN`);
 }
+
+// 인덱스 페이지
+fs.writeFileSync(path.join(blogDir, "index.html"), genIndexKo(), "utf8");
+fs.writeFileSync(path.join(enDir, "index.html"), genIndexEn(), "utf8");
+count += 2;
+console.log(`✓ 블로그 인덱스 — KO + EN`);
+
 console.log(`\n완료: ${count}개 파일 생성됨`);
