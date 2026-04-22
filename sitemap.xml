@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ── 메인 앱 ── -->
   <url>
     <loc>https://yesorno-tarot.vercel.app/</loc>
     <changefreq>weekly</changefreq>
@@ -10,4 +13,361 @@
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+
+  <!-- ── 블로그 KO ── -->
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-fool-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-fool-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-fool-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-magician-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-magician-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-magician-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-high-priestess-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-high-priestess-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-high-priestess-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-empress-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-empress-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-empress-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-emperor-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-emperor-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-emperor-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-hierophant-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hierophant-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hierophant-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-lovers-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-lovers-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-lovers-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-chariot-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-chariot-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-chariot-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-strength-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-strength-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-strength-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-hermit-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hermit-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hermit-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-wheel-of-fortune-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-wheel-of-fortune-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-wheel-of-fortune-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-justice-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-justice-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-justice-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-hanged-man-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hanged-man-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hanged-man-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-death-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-death-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-death-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-temperance-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-temperance-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-temperance-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-devil-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-devil-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-devil-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-tower-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-tower-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-tower-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-star-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-star-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-star-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-moon-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-moon-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-moon-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-sun-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-sun-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-sun-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-judgement-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-judgement-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-judgement-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/the-world-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-world-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-world-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ── 블로그 EN ── -->
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-fool-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-fool-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-fool-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-magician-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-magician-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-magician-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-high-priestess-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-high-priestess-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-high-priestess-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-empress-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-empress-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-empress-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-emperor-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-emperor-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-emperor-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-hierophant-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hierophant-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hierophant-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-lovers-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-lovers-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-lovers-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-chariot-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-chariot-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-chariot-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-strength-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-strength-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-strength-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-hermit-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hermit-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hermit-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-wheel-of-fortune-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-wheel-of-fortune-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-wheel-of-fortune-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-justice-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-justice-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-justice-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-hanged-man-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-hanged-man-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-hanged-man-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-death-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-death-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-death-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-temperance-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-temperance-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-temperance-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-devil-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-devil-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-devil-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-tower-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-tower-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-tower-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-star-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-star-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-star-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-moon-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-moon-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-moon-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-sun-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-sun-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-sun-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-judgement-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-judgement-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-judgement-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yesorno-tarot.vercel.app/blog/en/the-world-yes-no.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yesorno-tarot.vercel.app/blog/the-world-yes-no.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesorno-tarot.vercel.app/blog/en/the-world-yes-no.html"/>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
