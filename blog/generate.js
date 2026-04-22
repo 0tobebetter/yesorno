@@ -570,6 +570,21 @@ const DARK_SCRIPT_EN = `
       }
     <\/script>`;
 
+const GTM_ID = "GTM-NKX5RSN2";
+
+const GTM_HEAD = `    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','${GTM_ID}');<\/script>
+    <!-- End Google Tag Manager -->`;
+
+const GTM_BODY = `    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->`;
+
 const KO_LABELS = ["연애", "인간관계", "직장", "공부", "돈", "건강", "기타"];
 const EN_LABELS = ["LOVE", "PEOPLE", "WORK", "STUDY", "MONEY", "HEALTH", "OTHER"];
 
@@ -590,6 +605,7 @@ function genKo(card) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+${GTM_HEAD}
     <title>${card.koName}(${card.enName}) 타로 YES or NO | 양자택일 타로 해석</title>
     <meta name="description" content="타로카드 ${card.koName}(${card.enName})의 YES or NO 의미를 알아보세요. 정방향·역방향 해석, 연애·직장·돈·건강 상황별 조언까지 한눈에 확인하세요." />
     <meta name="keywords" content="${card.koName} 타로, ${card.enName} 타로, ${card.koName}카드 yes no, 타로 ${card.koName} 정방향, 타로 ${card.koName} 역방향, 양자택일 타로" />
@@ -627,6 +643,11 @@ function genKo(card) {
     <style>${SHARED_STYLE}</style>
   </head>
   <body id="app">
+${GTM_BODY}
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: "blog_card_view", card_name: "${card.enName}", lang: "ko" });
+    <\/script>
     <div class="blog-wrap">
       <div class="topbar">
         <a href="../index.html" class="site-logo">YES or NO ✦</a>
@@ -674,10 +695,10 @@ ${situations}
       <div class="cta-box">
         <div class="cta-heading">지금 바로 카드를 뽑아보세요</div>
         <p class="cta-sub">오늘 내 질문에 어떤 카드가 답할까요?<br/>하루 세 번 무료로 양자택일 타로를 뽑을 수 있습니다.</p>
-        <a href="../index.html" class="cta-btn">직접 뽑아보기 →</a>
+        <a href="../index.html" class="cta-btn" onclick="window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'cta_click',source_card:'${card.enName}',lang:'ko'});">직접 뽑아보기 →</a>
       </div>
       <footer class="blog-footer">
-        <span>© 2025 양자택일 타로</span>
+        <span>© 2026 양자택일 타로</span>
         <span>
           <a href="./index.html">블로그 목록</a>
           &nbsp;·&nbsp;
@@ -708,6 +729,7 @@ function genEn(card) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+${GTM_HEAD}
     <title>${card.enName} Tarot YES or NO | Yes or No Tarot Reading</title>
     <meta name="description" content="${card.enName} tarot card YES or NO meaning explained. Upright and reversed interpretations, plus advice for love, work, money, and health situations." />
     <meta name="keywords" content="${card.enName.toLowerCase()} tarot yes or no, ${card.enName.toLowerCase()} tarot meaning, ${card.enName.toLowerCase()} tarot upright reversed, yes no tarot, major arcana ${card.numeral.toLowerCase()}" />
@@ -745,6 +767,11 @@ function genEn(card) {
     <style>${SHARED_STYLE}</style>
   </head>
   <body id="app">
+${GTM_BODY}
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: "blog_card_view", card_name: "${card.enName}", lang: "en" });
+    <\/script>
     <div class="blog-wrap">
       <div class="topbar">
         <a href="../../index.html" class="site-logo">YES or NO ✦</a>
@@ -792,10 +819,10 @@ ${situations}
       <div class="cta-box">
         <div class="cta-heading">Draw your own card now</div>
         <p class="cta-sub">What card will answer your question today?<br/>Draw up to three free YES or NO tarot readings per day.</p>
-        <a href="../../index.html" class="cta-btn">Try it yourself →</a>
+        <a href="../../index.html" class="cta-btn" onclick="window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'cta_click',source_card:'${card.enName}',lang:'en'});">Try it yourself →</a>
       </div>
       <footer class="blog-footer">
-        <span>© 2025 Yes or No Tarot</span>
+        <span>© 2026 Yes or No Tarot</span>
         <span>
           <a href="../index.html">All posts</a>
           &nbsp;·&nbsp;
@@ -919,6 +946,7 @@ function genIndexKo() {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+${GTM_HEAD}
     <title>타로카드 YES or NO 해석 모음 | 양자택일 타로 블로그</title>
     <meta name="description" content="메이저 아르카나 22장 전체의 YES or NO 타로 해석을 한곳에서 확인하세요. 정방향·역방향 의미와 연애·직장·돈·건강 상황별 조언 수록." />
     <meta name="keywords" content="타로카드 yes no, 양자택일 타로 해석, 메이저 아르카나 해석, 타로 정방향 역방향" />
@@ -950,6 +978,7 @@ function genIndexKo() {
     <style>${INDEX_STYLE}</style>
   </head>
   <body id="app">
+${GTM_BODY}
     <div class="blog-wrap">
       <div class="topbar">
         <a href="../index.html" class="site-logo">YES or NO ✦</a>
@@ -976,10 +1005,10 @@ ${items}
       <div class="cta-box">
         <div class="cta-heading">지금 바로 카드를 뽑아보세요</div>
         <p class="cta-sub">오늘 내 질문에 어떤 카드가 답할까요?<br/>하루 세 번 무료로 양자택일 타로를 뽑을 수 있습니다.</p>
-        <a href="../index.html" class="cta-btn">직접 뽑아보기 →</a>
+        <a href="../index.html" class="cta-btn" onclick="window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'cta_click',source_card:'blog_index',lang:'ko'});">직접 뽑아보기 →</a>
       </div>
       <footer class="blog-footer">
-        <span>© 2025 양자택일 타로</span>
+        <span>© 2026 양자택일 타로</span>
         <span>
           <a href="../index.html">앱으로 이동</a>
           &nbsp;·&nbsp;
@@ -1046,6 +1075,7 @@ function genIndexEn() {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+${GTM_HEAD}
     <title>Tarot Card YES or NO Readings — Yes or No Tarot Blog</title>
     <meta name="description" content="YES or NO readings for all 22 Major Arcana tarot cards in one place. Upright and reversed meanings plus situation-specific advice for love, work, money, and health." />
     <meta name="keywords" content="tarot yes or no, major arcana yes no, tarot card meanings, yes no tarot readings" />
@@ -1077,6 +1107,7 @@ function genIndexEn() {
     <style>${INDEX_STYLE}</style>
   </head>
   <body id="app">
+${GTM_BODY}
     <div class="blog-wrap">
       <div class="topbar">
         <a href="../../index.html" class="site-logo">YES or NO ✦</a>
@@ -1103,10 +1134,10 @@ ${items}
       <div class="cta-box">
         <div class="cta-heading">Draw your own card now</div>
         <p class="cta-sub">What card will answer your question today?<br/>Draw up to three free YES or NO tarot readings per day.</p>
-        <a href="../../index.html" class="cta-btn">Try it yourself →</a>
+        <a href="../../index.html" class="cta-btn" onclick="window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'cta_click',source_card:'blog_index',lang:'en'});">Try it yourself →</a>
       </div>
       <footer class="blog-footer">
-        <span>© 2025 Yes or No Tarot</span>
+        <span>© 2026 Yes or No Tarot</span>
         <span>
           <a href="../../index.html">Go to app</a>
           &nbsp;·&nbsp;
