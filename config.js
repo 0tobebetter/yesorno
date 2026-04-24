@@ -49,7 +49,7 @@
             "그 외": "✨ 그 외",
           },
           drawBtn: "마음속 질문을 떠올리고 → 카드 뽑기",
-          subDesc: "Yes or No로 답할 수 있는 질문을 생각하고 카드를 뽑아보세요. 하루 3번 무료.",
+          subDesc: "네/아니오로 답이 나올 수 있는 질문을 생각하고 카드를 클릭하세요!",
           shareNudgeMain: "친구한테도 공유해보세요!",
           shareNudgeBonus: "공유하면 오늘 한 번 더 뽑을 수 있어요 🎁",
           shareX: "X 공유",
@@ -103,7 +103,7 @@ https://yesorno-tarot.vercel.app/
             "그 외": "✨ Other",
           },
           drawBtn: "Think of your question → Draw a card",
-          subDesc: "Think of a yes-or-no question and draw your card. 3 free draws per day.",
+          subDesc: "Think of a yes-or-no question, then tap the card!",
           shareNudgeMain: "Share with a friend!",
           shareNudgeBonus: "Share and get one more draw today 🎁",
           shareX: "Share on X",
@@ -264,16 +264,17 @@ https://yesorno-tarot.vercel.app/
           text.textContent = t.quotaAllUsed;
         }
 
-        const drawBtn = document.getElementById("drawBtn");
+        const cardContainer = document.getElementById("cardContainer");
         const quotaDone = document.getElementById("quotaDone");
         if (remaining === 0) {
-          if (drawBtn) drawBtn.classList.add("hidden");
+          // 횟수 소진 — 카드 영구 비활성화
+          if (cardContainer) cardContainer.classList.add("no-draw");
           if (quotaDone) {
             quotaDone.classList.remove("hidden");
             quotaDone.innerHTML = `${t.tomorrowBtn}<br><span style="font-size:0.85rem;opacity:0.7">${t.quotaDoneMsg}</span>`;
           }
         } else {
-          if (drawBtn) drawBtn.classList.remove("hidden");
+          // 횟수 남아있음 — quotaDone만 숨김 (no-draw 해제는 resetCard에서)
           if (quotaDone) quotaDone.classList.add("hidden");
         }
 

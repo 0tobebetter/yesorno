@@ -88,7 +88,8 @@
         if (drawn || getQuotaUsed() >= getMaxQuota()) return;
         drawn = true;
         recordDrawTime();
-        document.getElementById("drawBtn").disabled = true;
+        const cardContainer = document.getElementById("cardContainer");
+        if (cardContainer) cardContainer.classList.add("no-draw");
 
         const key = CARD_KEYS[Math.floor(Math.random() * CARD_KEYS.length)];
         const data = DESCS[key];
@@ -149,11 +150,9 @@
           document.getElementById("resultBadge").textContent = currentCard.confidence;
           document.getElementById("resultDesc").textContent = currentCard.desc;
           updateDivider();
-          document.getElementById("drawBtn").style.display = "none";
-          document
-            .getElementById("formArea")
-            .querySelector(".field-label")
-            .closest("#formArea").style.display = "none";
+          // 카테고리 드롭다운만 숨김 (quotaDone은 그대로 표시 가능하도록)
+          const catWrap = document.getElementById("formArea")?.querySelector(".category-wrap");
+          if (catWrap) catWrap.style.display = "none";
           // 질문 입력했으면 체크박스 표시
           const qText = document.getElementById("qInput")?.value.trim() || "";
           const includeWrap = document.getElementById("includeQWrap");
@@ -207,10 +206,10 @@
         drawn = false;
         document.getElementById("cardInner").classList.remove("flipped");
         document.getElementById("resultArea").classList.add("hidden");
-        const btn = document.getElementById("drawBtn");
-        btn.disabled = false;
-        btn.style.display = "";
-        document.getElementById("formArea").style.display = "";
+        const cardContainer = document.getElementById("cardContainer");
+        if (cardContainer) cardContainer.classList.remove("no-draw");
+        const catWrap = document.getElementById("formArea")?.querySelector(".category-wrap");
+        if (catWrap) catWrap.style.display = "";
         const qInputEl = document.getElementById("qInput");
         if (qInputEl) { qInputEl.value = ""; updateCount(); }
         document.getElementById("catSelect").value = "";
