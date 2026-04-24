@@ -334,11 +334,13 @@
         margin-bottom: 1.6rem;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
+        animation: cardFloat 3s ease-in-out infinite;
       }
       .card-container.no-draw {
         cursor: default;
         pointer-events: none;
         opacity: 0.5;
+        animation: none;
       }
       .card-container:not(.no-draw):hover .card-inner:not(.flipped) {
         box-shadow: 6px 6px 0 var(--border);
@@ -379,14 +381,10 @@
       }
       .card-back-inner {
         text-align: center;
-        animation: cardFloat 3s ease-in-out infinite;
       }
       @keyframes cardFloat {
         0%, 100% { transform: translateY(0px); }
         50%       { transform: translateY(-8px); }
-      }
-      .card-inner.flipped .card-back-inner {
-        animation: none;
       }
       .card-back-q {
         font-family: "Caveat", cursive;
