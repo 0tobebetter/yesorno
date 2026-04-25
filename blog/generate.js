@@ -492,12 +492,13 @@ const SHARED_STYLE = `
       .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.6rem; gap: 0.75rem; }
       .site-logo { font-family: "Caveat", cursive; font-size: 1.4rem; font-weight: 700; color: var(--fg); text-decoration: none; }
       .site-logo:hover { opacity: 0.75; }
-      .topbar-right { display: flex; gap: 0.5rem; align-items: center; }
-      .lang-switch { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--bg2); color: var(--fg2); text-decoration: none; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
-      .lang-switch:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); color: var(--fg); }
-      .dark-toggle { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--btn-bg); color: var(--btn-fg); cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
-      .dark-toggle:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
-      .dark-toggle:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--border); }
+      .topbar-right { display: flex; gap: 0.75rem; align-items: center; }
+      .toggle-wrap { display: flex; align-items: center; gap: 0.45rem; cursor: pointer; user-select: none; }
+      .toggle-label { font-family: "IsYun", sans-serif; font-size: 0.82rem; color: var(--fg2); }
+      .toggle-track { width: 40px; height: 22px; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 999px; position: relative; transition: background 0.2s; }
+      .toggle-thumb { width: 13px; height: 13px; background: var(--fg); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.2s, background 0.2s; }
+      [data-dark="1"] #darkToggle .toggle-thumb { transform: translateX(17px); }
+      #langToggle[data-on="1"] .toggle-thumb { transform: translateX(17px); }
       .breadcrumb { font-size: 0.82rem; color: var(--fg3); margin-bottom: 2rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
       .breadcrumb a { color: var(--fg2); text-decoration: none; border-bottom: 1px solid var(--border); }
       .breadcrumb a:hover { color: var(--fg); }
@@ -541,15 +542,15 @@ const DARK_SCRIPT_KO = `
       (function () {
         if (localStorage.getItem("dark") === "1") {
           document.getElementById("app").setAttribute("data-dark", "1");
-          document.getElementById("darkBtn").textContent = "☀️ 라이트";
+          document.getElementById("darkLabel").textContent = "☀️ 라이트";
         }
       })();
       function toggleDark() {
         const app = document.getElementById("app");
-        const btn = document.getElementById("darkBtn");
+        const label = document.getElementById("darkLabel");
         const isDark = app.getAttribute("data-dark") === "1";
-        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 다크"; localStorage.setItem("dark", "0"); }
-        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ 라이트"; localStorage.setItem("dark", "1"); }
+        if (isDark) { app.removeAttribute("data-dark"); label.textContent = "🌙 다크"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); label.textContent = "☀️ 라이트"; localStorage.setItem("dark", "1"); }
       }
     <\/script>`;
 
@@ -558,15 +559,15 @@ const DARK_SCRIPT_EN = `
       (function () {
         if (localStorage.getItem("dark") === "1") {
           document.getElementById("app").setAttribute("data-dark", "1");
-          document.getElementById("darkBtn").textContent = "☀️ Light";
+          document.getElementById("darkLabel").textContent = "☀️ Light";
         }
       })();
       function toggleDark() {
         const app = document.getElementById("app");
-        const btn = document.getElementById("darkBtn");
+        const label = document.getElementById("darkLabel");
         const isDark = app.getAttribute("data-dark") === "1";
-        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 Dark"; localStorage.setItem("dark", "0"); }
-        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ Light"; localStorage.setItem("dark", "1"); }
+        if (isDark) { app.removeAttribute("data-dark"); label.textContent = "🌙 Dark"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); label.textContent = "☀️ Light"; localStorage.setItem("dark", "1"); }
       }
     <\/script>`;
 
@@ -652,8 +653,14 @@ ${GTM_BODY}
       <div class="topbar">
         <a href="../index.html" class="site-logo">YES or NO ✦</a>
         <div class="topbar-right">
-          <a href="./en/${card.file}.html" class="lang-switch">EN</a>
-          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 다크</button>
+          <div class="toggle-wrap" id="langToggle" data-on="0" onclick="location.href='./en/${card.file}.html'">
+            <span class="toggle-label">한</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
+          <div class="toggle-wrap" id="darkToggle" onclick="toggleDark()">
+            <span class="toggle-label" id="darkLabel">🌙 다크</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
         </div>
       </div>
       <nav class="breadcrumb" aria-label="breadcrumb">
@@ -776,8 +783,14 @@ ${GTM_BODY}
       <div class="topbar">
         <a href="../../index.html" class="site-logo">YES or NO ✦</a>
         <div class="topbar-right">
-          <a href="../${card.file}.html" class="lang-switch">한국어</a>
-          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+          <div class="toggle-wrap" id="langToggle" data-on="1" onclick="location.href='../${card.file}.html'">
+            <span class="toggle-label">EN</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
+          <div class="toggle-wrap" id="darkToggle" onclick="toggleDark()">
+            <span class="toggle-label" id="darkLabel">🌙 Dark</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
         </div>
       </div>
       <nav class="breadcrumb" aria-label="breadcrumb">
@@ -870,12 +883,13 @@ const INDEX_STYLE = `
       .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.6rem; gap: 0.75rem; }
       .site-logo { font-family: "Caveat", cursive; font-size: 1.4rem; font-weight: 700; color: var(--fg); text-decoration: none; }
       .site-logo:hover { opacity: 0.75; }
-      .topbar-right { display: flex; gap: 0.5rem; align-items: center; }
-      .lang-switch { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--bg2); color: var(--fg2); text-decoration: none; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
-      .lang-switch:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); color: var(--fg); }
-      .dark-toggle { font-family: "IsYun", sans-serif; font-size: 0.82rem; padding: 0.3rem 0.75rem; border: 1.5px solid var(--border); background: var(--btn-bg); color: var(--btn-fg); cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s; }
-      .dark-toggle:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
-      .dark-toggle:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--border); }
+      .topbar-right { display: flex; gap: 0.75rem; align-items: center; }
+      .toggle-wrap { display: flex; align-items: center; gap: 0.45rem; cursor: pointer; user-select: none; }
+      .toggle-label { font-family: "IsYun", sans-serif; font-size: 0.82rem; color: var(--fg2); }
+      .toggle-track { width: 40px; height: 22px; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 999px; position: relative; transition: background 0.2s; }
+      .toggle-thumb { width: 13px; height: 13px; background: var(--fg); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.2s, background 0.2s; }
+      [data-dark="1"] #darkToggle .toggle-thumb { transform: translateX(17px); }
+      #langToggle[data-on="1"] .toggle-thumb { transform: translateX(17px); }
       .breadcrumb { font-size: 0.82rem; color: var(--fg3); margin-bottom: 1rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
       .breadcrumb a { color: var(--fg2); text-decoration: none; border-bottom: 1px solid var(--border); }
       .breadcrumb a:hover { color: var(--fg); }
@@ -983,8 +997,14 @@ ${GTM_BODY}
       <div class="topbar">
         <a href="../index.html" class="site-logo">YES or NO ✦</a>
         <div class="topbar-right">
-          <a href="./en/index.html" class="lang-switch">EN</a>
-          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 다크</button>
+          <div class="toggle-wrap" id="langToggle" data-on="0" onclick="location.href='./en/index.html'">
+            <span class="toggle-label">한</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
+          <div class="toggle-wrap" id="darkToggle" onclick="toggleDark()">
+            <span class="toggle-label" id="darkLabel">🌙 다크</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
         </div>
       </div>
       <nav class="breadcrumb" aria-label="breadcrumb">
@@ -1020,15 +1040,15 @@ ${items}
       (function () {
         if (localStorage.getItem("dark") === "1") {
           document.getElementById("app").setAttribute("data-dark", "1");
-          document.getElementById("darkBtn").textContent = "☀️ 라이트";
+          document.getElementById("darkLabel").textContent = "☀️ 라이트";
         }
       })();
       function toggleDark() {
         const app = document.getElementById("app");
-        const btn = document.getElementById("darkBtn");
+        const label = document.getElementById("darkLabel");
         const isDark = app.getAttribute("data-dark") === "1";
-        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 다크"; localStorage.setItem("dark", "0"); }
-        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ 라이트"; localStorage.setItem("dark", "1"); }
+        if (isDark) { app.removeAttribute("data-dark"); label.textContent = "🌙 다크"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); label.textContent = "☀️ 라이트"; localStorage.setItem("dark", "1"); }
       }
       function filter(type, btn) {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1112,8 +1132,14 @@ ${GTM_BODY}
       <div class="topbar">
         <a href="../../index.html" class="site-logo">YES or NO ✦</a>
         <div class="topbar-right">
-          <a href="../index.html" class="lang-switch">한국어</a>
-          <button class="dark-toggle" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+          <div class="toggle-wrap" id="langToggle" data-on="1" onclick="location.href='../index.html'">
+            <span class="toggle-label">EN</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
+          <div class="toggle-wrap" id="darkToggle" onclick="toggleDark()">
+            <span class="toggle-label" id="darkLabel">🌙 Dark</span>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </div>
         </div>
       </div>
       <nav class="breadcrumb" aria-label="breadcrumb">
@@ -1149,15 +1175,15 @@ ${items}
       (function () {
         if (localStorage.getItem("dark") === "1") {
           document.getElementById("app").setAttribute("data-dark", "1");
-          document.getElementById("darkBtn").textContent = "☀️ Light";
+          document.getElementById("darkLabel").textContent = "☀️ Light";
         }
       })();
       function toggleDark() {
         const app = document.getElementById("app");
-        const btn = document.getElementById("darkBtn");
+        const label = document.getElementById("darkLabel");
         const isDark = app.getAttribute("data-dark") === "1";
-        if (isDark) { app.removeAttribute("data-dark"); btn.textContent = "🌙 Dark"; localStorage.setItem("dark", "0"); }
-        else { app.setAttribute("data-dark", "1"); btn.textContent = "☀️ Light"; localStorage.setItem("dark", "1"); }
+        if (isDark) { app.removeAttribute("data-dark"); label.textContent = "🌙 Dark"; localStorage.setItem("dark", "0"); }
+        else { app.setAttribute("data-dark", "1"); label.textContent = "☀️ Light"; localStorage.setItem("dark", "1"); }
       }
       function filter(type, btn) {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));

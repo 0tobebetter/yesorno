@@ -196,6 +196,10 @@ https://yesorno-tarot.vercel.app/
         const langWrap = document.getElementById("langToggleWrap");
         if (langWrap) langWrap.dataset.active = currentLang === "en" ? "1" : "0";
 
+        // 푸터 BLOG 링크 — 언어에 맞는 블로그로
+        const blogLinkEl = document.getElementById("blogLink");
+        if (blogLinkEl) blogLinkEl.href = currentLang === "en" ? "blog/en/index.html" : "blog/index.html";
+
         // 공유 이미지 푸터
         const scFooter = document.getElementById("sc-footer");
         if (scFooter) scFooter.textContent = `https://yesorno-tarot.vercel.app/ · ${t.scFooter}`;
