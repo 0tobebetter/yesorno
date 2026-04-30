@@ -282,7 +282,7 @@
       }
       async function saveImage() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ event: "share", method: "image_save" });
+        dataLayer.push({ event: "share_result", method: "image_save" });
 
         const c = currentCard;
         if (!c) {
@@ -472,6 +472,9 @@
                     files: [file],
                     title: getLang() === "en" ? "YES or NO Tarot Result" : "YES or NO 타로 결과",
                   });
+                  // Web Share API 성공 시 이벤트
+                  window.dataLayer = window.dataLayer || [];
+                  dataLayer.push({ event: "share_result", method: "native_share" });
                 } catch (err) {
                   if (err.name !== "AbortError") fallbackDownload(canvas, c);
                 }
