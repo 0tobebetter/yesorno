@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="YES or NO 타로카드 앱을 만든 이유와 소개입니다." />
+    <link rel="canonical" href="https://yesorno-tarot.vercel.app/about.html" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Consent Mode v2 -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("consent", "default", {
+        analytics_storage: "granted",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500,
+      });
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NKX5RSN2');
+    </script>
+    <!-- End Google Tag Manager -->
+    <title>About | YES or NO Tarot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      #langToggleWrap[data-active="1"] .toggle-thumb {
+        transform: translateX(18px);
+      }
+      .about-star {
+        font-size: 1.5rem;
+        color: var(--fg);
+        margin-bottom: 2rem;
+        line-height: 1;
+        transition: color 0.2s;
+      }
+      .about-p {
+        font-family: "IsYun", cursive;
+        font-size: 1rem;
+        color: var(--fg2);
+        line-height: 1.85;
+        margin-bottom: 1.4rem;
+        transition: color 0.2s;
+      }
+      .about-bmc {
+        text-align: center;
+        margin: 1.8rem 0 1.4rem;
+      }
+      .about-bmc img {
+        width: 160px;
+        display: inline-block;
+      }
+      .about-footnote {
+        font-family: "IsYun", cursive;
+        font-size: 0.88rem;
+        color: var(--fg3);
+        font-style: italic;
+        text-align: center;
+        transition: color 0.2s;
+      }
+    </style>
+  </head>
+  <body id="app">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKX5RSN2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="wrap">
+      <div class="top-bar">
+        <div class="toggle-wrap" id="langToggleWrap" data-active="0" onclick="toggleLang()">
+          <span class="toggle-label" id="langLabel">한</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="toggle-wrap" onclick="toggleDark()">
+          <span class="toggle-label" id="toggleLabel">🌙 다크</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+      <div class="about-star">★</div>
+
+      <div id="contentKo">
+        <p class="about-p">4년간 타로 리더로 활동하며 다양한 고민을 함께했습니다.<br />내담자의 이야기를 작은 단위로 나누고, 질문을 단순화하는 것을 좋아했어요. 상담을 통해 스스로 실마리를 찾아가는 과정이 좋았습니다.</p>
+        <p class="about-p">양자택일 스프레드를 특히 많이 찾아주셨는데, 그 경험과 본업을 결합해 바이브코딩으로 만든 앱입니다.</p>
+        <p class="about-p">도움이 되셨다면 복채 한 잔 부탁드려요 ☕</p>
+      </div>
+
+      <div id="contentEn" class="hidden">
+        <p class="about-p">For four years, I worked as a tarot reader — helping people untangle their thoughts, one question at a time.<br />I loved breaking down complex worries into something smaller and clearer. Watching someone find their own answer through a reading was always the best part.</p>
+        <p class="about-p">The yes-or-no spread was always a favourite. I built this app to bring that experience online — combining tarot with my day job.</p>
+        <p class="about-p">If this helped you, consider buying me a coffee ☕</p>
+      </div>
+
+      <div class="about-bmc">
+        <a href="https://buymeacoffee.com/yesornotarot" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="160" />
+        </a>
+      </div>
+
+      <p class="about-footnote">
+        <span id="footnoteKo">현재 개인 상담은 받지 않습니다.</span>
+        <span id="footnoteEn" class="hidden">I'm not taking personal readings at this time.</span>
+      </p>
+
+      <footer>
+        <a href="blog/index.html">BLOG</a> ·
+        <a href="about.html">About</a> ·
+        <a href="https://buymeacoffee.com/yesornotarot" target="_blank" rel="noopener">☕</a> ·
+        <a href="privacy.html">Privacy Policy</a> ·
+        <span>© 2026 YES or NO Tarot</span>
+      </footer>
+    </div>
+
+    <script>
+      let dark = localStorage.getItem("dark") === "1" ? 1
+        : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0);
+      let lang = localStorage.getItem("lang") || ((navigator.language || "ko").startsWith("ko") ? "ko" : "en");
+
+      if (dark) {
+        document.getElementById("app").setAttribute("data-dark", "1");
+      }
+
+      function toggleDark() {
+        dark = dark ? 0 : 1;
+        const app = document.getElementById("app");
+        dark ? app.setAttribute("data-dark", "1") : app.removeAttribute("data-dark");
+        localStorage.setItem("dark", dark ? "1" : "0");
+        applyLabels();
+      }
+
+      function toggleLang() {
+        lang = lang === "ko" ? "en" : "ko";
+        localStorage.setItem("lang", lang);
+        applyLang();
+      }
+
+      function applyLabels() {
+        const isEn = lang === "en";
+        document.getElementById("toggleLabel").textContent =
+          dark ? (isEn ? "☀️ Light" : "☀️ 라이트") : (isEn ? "🌙 Dark" : "🌙 다크");
+      }
+
+      function applyLang() {
+        const isEn = lang === "en";
+        document.documentElement.lang = lang;
+        document.getElementById("langToggleWrap").dataset.active = isEn ? "1" : "0";
+        document.getElementById("langLabel").textContent = isEn ? "EN" : "한";
+        document.getElementById("contentKo").classList.toggle("hidden", isEn);
+        document.getElementById("contentEn").classList.toggle("hidden", !isEn);
+        document.getElementById("footnoteKo").classList.toggle("hidden", isEn);
+        document.getElementById("footnoteEn").classList.toggle("hidden", !isEn);
+        applyLabels();
+      }
+
+      applyLang();
+    </script>
+  </body>
+</html>
