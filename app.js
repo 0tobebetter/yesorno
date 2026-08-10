@@ -27,11 +27,11 @@
       // 카카오 공유
       // ════════════════════════════════
       function shareToKakao() {
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ event: "share_result", method: "kakao" });
-
         const c = currentCard;
         if (!c) return;
+
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ event: "share", method: "kakao", content_type: "tarot_result" });
 
         if (typeof Kakao === "undefined") {
           showToast(getT().toastKakaoLoading);
@@ -60,6 +60,7 @@
           ? `YES or NO Tarot — ${verdict} (${c.confidence})`
           : `YES or NO 타로 — ${verdict} (${c.confidence})`;
         const desc = c.desc.length > 80 ? c.desc.slice(0, 80) + "…" : c.desc;
+        const shareUrl = `${window.location.origin}/?utm_source=kakao&utm_medium=social&utm_campaign=tarot_share`;
 
         Kakao.Share.sendDefault({
           objectType: "feed",
@@ -68,16 +69,16 @@
             description: desc,
             imageUrl: "https://yesorno-tarot.vercel.app/og-image.png",
             link: {
-              mobileWebUrl: "https://yesorno-tarot.vercel.app/",
-              webUrl: "https://yesorno-tarot.vercel.app/",
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl,
             },
           },
           buttons: [
             {
               title: isEn ? "Try it yourself" : "나도 뽑아보기",
               link: {
-                mobileWebUrl: "https://yesorno-tarot.vercel.app/",
-                webUrl: "https://yesorno-tarot.vercel.app/",
+                mobileWebUrl: shareUrl,
+                webUrl: shareUrl,
               },
             },
           ],
@@ -239,10 +240,7 @@
 
       function shareToX() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "share_result",
-          method: "x",
-        });
+        dataLayer.push({ event: "share", method: "x", content_type: "tarot_result" });
         window.open(
           `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`,
           "_blank",
@@ -251,21 +249,16 @@
       }
       function shareToInstagram() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "share_result",
-          method: "instagram",
-        });
+        dataLayer.push({ event: "share", method: "instagram", content_type: "tarot_result" });
         if (navigator.clipboard) navigator.clipboard.writeText(getShareText());
         showToast(I18N[getLang()].toastInstaCopied);
         grantShareBonus();
       }
       function copyResult() {
+        const copyUrl = `${window.location.origin}/?utm_source=copy&utm_medium=social&utm_campaign=tarot_share`;
+        const t = getShareText() + "\n" + copyUrl;
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-          event: "share_result",
-          method: "copy",
-        });
-        const t = getShareText();
+        dataLayer.push({ event: "share", method: "copy_link", content_type: "tarot_result" });
         if (navigator.clipboard)
           navigator.clipboard
             .writeText(t)
@@ -282,7 +275,7 @@
       }
       async function saveImage() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ event: "share_result", method: "image_save" });
+        dataLayer.push({ event: "share", method: "image_save", content_type: "tarot_result" });
 
         const c = currentCard;
         if (!c) {
@@ -472,9 +465,8 @@
                     files: [file],
                     title: getLang() === "en" ? "YES or NO Tarot Result" : "YES or NO 타로 결과",
                   });
-                  // Web Share API 성공 시 이벤트
                   window.dataLayer = window.dataLayer || [];
-                  dataLayer.push({ event: "share_result", method: "native_share" });
+                  dataLayer.push({ event: "share", method: "image_save", content_type: "tarot_result" });
                 } catch (err) {
                   if (err.name !== "AbortError") fallbackDownload(canvas, c);
                 }
