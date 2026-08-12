@@ -50,8 +50,9 @@
           },
           drawBtn: "마음속 질문을 떠올리고 → 카드 뽑기",
           subDesc: "네/아니오로 답이 나올 수 있는 질문을 생각하고 카드를 클릭하세요!",
-          shareNudgeMain: "친구한테도 공유해보세요!",
-          shareNudgeBonus: "공유하면 오늘 한 번 더 뽑을 수 있어요 🎁",
+          shareNudgeMain: "공유하면 오늘 한 번 더 뽑을 수 있어요 🎁",
+          shareNudgeBonus: "친구에게 보내고 바로 리워드 받기",
+          shareSaveImage: "이미지로 저장하고 공유",
           shareX: "X 공유",
           shareImage: "이미지 저장",
           shareInsta: "인스타",
@@ -104,8 +105,9 @@ https://yesorno-tarot.vercel.app/
           },
           drawBtn: "Think of your question → Draw a card",
           subDesc: "Think of a yes-or-no question, then tap the card!",
-          shareNudgeMain: "Share with a friend!",
-          shareNudgeBonus: "Share and get one more draw today 🎁",
+          shareNudgeMain: "Share and get one more draw today 🎁",
+          shareNudgeBonus: "Send it to a friend for an instant reward",
+          shareSaveImage: "Save image and share",
           shareX: "Share on X",
           shareImage: "Save image",
           shareInsta: "Instagram",
@@ -170,6 +172,7 @@ https://yesorno-tarot.vercel.app/
           "subDesc":         t.subDesc,
           "shareNudgeMain":  t.shareNudgeMain,
           "shareNudgeBonus": t.shareNudgeBonus,
+          "shareSaveText":   t.shareSaveImage,
           "privacyLink":     t.privacyLink,
           "fieldLabelCat":   t.categoryLabel,
           "footerCopy":      t.footerCopy,
@@ -255,6 +258,10 @@ https://yesorno-tarot.vercel.app/
           d.className = "quota-dot" + (i < remaining ? "" : " empty");
           dots.appendChild(d);
         }
+
+        // 공유 독려 배너 — 오늘 남은 기회가 1번 이하일 때만 표시
+        const shareNudge = document.getElementById("shareNudge");
+        if (shareNudge) shareNudge.classList.toggle("hidden", remaining >= 2);
 
         if (remaining > 0) {
           const bonus = getBonusUsed();

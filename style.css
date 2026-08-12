@@ -467,6 +467,8 @@
 
       /* ── 공유 섹션 ── */
       .share-section {
+        padding-top: 1rem;
+        border-top: 1.5px dashed var(--border);
         animation: sketchIn 0.4s ease 1.2s both;
       }
       .share-notice {
@@ -476,23 +478,81 @@
         margin-bottom: 0.65rem;
         transition: color 0.2s;
       }
-      .share-row {
+      /* 공유 독려 배너 */
+      .share-nudge {
         display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        margin-bottom: 0.75rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        text-align: center;
+        margin-bottom: 0.9rem;
+        padding: 0.9rem 1rem;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: #fdf0b8;
+        transition: all 0.2s;
+      }
+      [data-dark="1"] .share-nudge {
+        background: #4a4326;
+      }
+      .share-nudge-main {
+        font-family: "IsYun", cursive;
+        font-size: 1rem;
+        color: var(--fg);
+        font-weight: 700;
+        line-height: 1.4;
+      }
+      .share-nudge-bonus {
+        font-family: "IsYun", cursive;
+        font-size: 0.82rem;
+        color: var(--fg3);
+      }
+      /* 이미지로 저장하고 공유 (메인 버튼) */
+      .share-save-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        width: 100%;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.6rem;
+        font-family: "IsYun", cursive;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        border-radius: 16px;
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        transition:
+          transform 0.1s,
+          opacity 0.2s;
+      }
+      .share-save-btn:hover {
+        opacity: 0.9;
+      }
+      .share-save-btn:active {
+        transform: scale(0.98);
+      }
+      /* X / 카카오 / 인스타 / 복사 2x2 그리드 */
+      .share-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        margin-bottom: 0.6rem;
       }
       .share-btn {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 0.35rem;
-        padding: 0.5rem 1rem;
+        padding: 0.65rem 1rem;
         font-family: "IsYun", cursive;
         font-size: 0.9rem;
         font-weight: 700;
         cursor: pointer;
         border: 1.5px solid var(--border);
-        box-shadow: var(--shadow-sm);
+        border-radius: 16px;
         background: var(--card-bg);
         color: var(--fg);
         transition:
@@ -509,9 +569,15 @@
         transform: translate(1px, 1px);
         box-shadow: 1px 1px 0 var(--border);
       }
-      .share-btn.primary {
-        background: var(--btn-bg);
-        color: var(--btn-fg);
+      .share-btn.share-kakao {
+        background: #fee500;
+        border-color: #fee500;
+        color: #1a1a1a;
+      }
+      .share-btn.share-insta {
+        border: none;
+        color: #fff;
+        background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
       }
 
       /* ── 이미지 저장용 카드 (화면에 안 보임) ── */
@@ -572,14 +638,15 @@
 
       /* ── 다시 뽑기 / 마감 ── */
       .again-btn {
+        width: 100%;
         background: transparent;
         border: 1.5px solid var(--border);
-        color: var(--fg);
+        border-radius: 16px;
+        color: var(--fg3);
         font-family: "IsYun", cursive;
         font-size: 1rem;
-        padding: 0.55rem 1.4rem;
+        padding: 0.75rem 1.4rem;
         cursor: pointer;
-        box-shadow: var(--shadow-sm);
         transition:
           transform 0.1s,
           box-shadow 0.1s,
