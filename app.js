@@ -275,7 +275,7 @@
       }
       async function saveImage() {
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ event: "share", method: "image_save", content_type: "tarot_result" });
+        dataLayer.push({ event: "image_save", content_type: "tarot_result" });
 
         const c = currentCard;
         if (!c) {
@@ -465,8 +465,9 @@
                     files: [file],
                     title: getLang() === "en" ? "YES or NO Tarot Result" : "YES or NO 타로 결과",
                   });
+                  // OS 공유 시트로 실제 전달된 경우 — 저장(image_save)이 아닌 공유로 집계
                   window.dataLayer = window.dataLayer || [];
-                  dataLayer.push({ event: "share", method: "image_save", content_type: "tarot_result" });
+                  dataLayer.push({ event: "share", method: "native_share", content_type: "tarot_result" });
                 } catch (err) {
                   if (err.name !== "AbortError") fallbackDownload(canvas, c);
                 }
